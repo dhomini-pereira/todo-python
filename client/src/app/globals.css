@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply h-[100vh] flex flex-col items-center justify-center;
+}

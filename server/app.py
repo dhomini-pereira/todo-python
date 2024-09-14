@@ -6,6 +6,10 @@ app = Flask(__name__)
 def hello():
     return 'Hello, World!'
 
+@app.route('/Girino', methods=["GET"])
+def girino():
+    return 'Hello, Girino'
+    
 @app.route('/renato', methods=['GET'])
 def peixe():
     return 'Peixe espada'

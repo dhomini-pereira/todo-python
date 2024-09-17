@@ -1,5 +1,6 @@
 from flask import Flask, request
 from src.controllers.user.create_user import create_user
+from src.controllers.user.login_user import login_user
 
 app = Flask(__name__)
 
@@ -11,6 +12,11 @@ def register():
 @app.post("/loggedin")
 def loggedin():
     return 'loggedin'
+
+@app.post("/login")
+def login():
+    data = request.json
+    return login_user(data)
 
 @app.get("/task")
 def list_tasks():

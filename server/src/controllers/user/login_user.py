@@ -19,6 +19,7 @@ def login_user(data):
         }), 403
         
     token = create_token({
+        'id': user.id,
         'username': user.username,
         'email': user.email,
         'createdAt': user.created_at.strftime('%Y-%m-%d %H:%M:%S')

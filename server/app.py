@@ -1,6 +1,8 @@
 from flask import Flask, request
 from src.controllers.user.create_user import create_user
 from src.controllers.user.login_user import login_user
+from src.controllers.task.list_tasks import list_tasks
+from src.utils.decode_token import decode_token
 
 app = Flask(__name__)
 
@@ -9,24 +11,30 @@ def register():
     data = request.json
     return create_user(data)
 
-@app.post("/loggedin")
-def loggedin():
-    return 'loggedin'
-
 @app.post("/login")
 def login():
     data = request.json
     return login_user(data)
 
+@app.delete("/user")
+def delete_user():
+    return 'delete user'
+
+@app.put("/user")
+def update_user():
+    return 'update user'
+
 @app.get("/task")
-def list_tasks():
-    return 'list tasks'
+def list_of_tasks():
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    data = request.args
+    return list_tasks(data, userId)
 
 @app.get("/task/<id>")
 def find_task(id):
     return f'find task {id}'
 
-@app.post("/task/<id>")
+@app.post("/task")
 def create_task(id):
     return f'create task {id}'
 

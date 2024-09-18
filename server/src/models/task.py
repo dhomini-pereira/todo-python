@@ -1,8 +1,8 @@
 import enum
 import datetime
 from peewee import AutoField, CharField, TextField, DateTimeField, ForeignKeyField
-from config.database import BaseModel
-from models.user import User
+from src.config.database import BaseModel
+from src.models.user import User
 
 class Status(enum.Enum):
     PENDING = 'PENDING'

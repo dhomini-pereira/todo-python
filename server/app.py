@@ -5,6 +5,7 @@ from src.controllers.user.login_user import login_user
 from src.controllers.task.list_tasks import list_tasks
 from src.controllers.task.del_task import del_task
 from src.controllers.task.find_task import find_task
+from src.controllers.user.remove_user import remove_user
 from src.utils.decode_token import decode_token
 
 app = Flask(__name__)
@@ -22,7 +23,8 @@ def signin():
 
 @app.delete("/user")
 def delete_user():
-    return 'delete user'
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return remove_user(userId)
 
 @app.put("/user")
 def update_user():

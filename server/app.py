@@ -1,10 +1,12 @@
 from flask import Flask, request
+from flask_cors import CORS
 from src.controllers.user.create_user import create_user
 from src.controllers.user.login_user import login_user
 from src.controllers.task.list_tasks import list_tasks
 from src.utils.decode_token import decode_token
 
 app = Flask(__name__)
+CORS(app)
 
 @app.post("/register")
 def register():

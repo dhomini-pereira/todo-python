@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from src.controllers.user.create_user import create_user
 from src.controllers.user.login_user import login_user
@@ -8,8 +8,27 @@ from src.controllers.task.find_task import find_task
 from src.controllers.user.remove_user import remove_user
 from src.utils.decode_token import decode_token
 
+
+
 app = Flask(__name__)
 CORS(app)
+
+@app.before_request
+def validar_token():
+    if request.path in ['/signup', '/signin']:
+        return None
+    
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token não fornecido"}), 401
+
+    token_data = decode_token(auth_header)
+    
+    if 'error' in token_data:
+        if token_data['error'] == 'Token expirado':
+            return jsonify({"error": "Token expirado"}), 401
+        else:
+            return jsonify({"error": "Token inválido"}), 403
 
 @app.post("/signup")
 def signup():

@@ -7,8 +7,7 @@ from src.controllers.task.del_task import del_task
 from src.controllers.task.find_task import find_task
 from src.controllers.user.remove_user import remove_user
 from src.utils.decode_token import decode_token
-
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)

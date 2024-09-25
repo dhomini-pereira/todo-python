@@ -16,10 +16,10 @@ Esta é uma API criada utilizando Flask para definição de Endpoints para a bus
 
 | Rota         | Método | Descrição                | Necessita de autorização |
 | ------------ | ------ | ------------------------ | ------------------------ |
-| `/login`     | POST   | Autentica um usuário     | ❌                       |
-| `/register`  | POST   | Registra um usuário      | ❌                       |
-| `/users`     | PUT    | Atualiza um usuário      | ✅                       |
-| `/users`     | DELETE | Exclui um usuário        | ✅                       |
+| `/signin`    | POST   | Autentica um usuário     | ❌                       |
+| `/signup`    | POST   | Registra um usuário      | ❌                       |
+| `/user`      | PUT    | Atualiza um usuário      | ✅                       |
+| `/user`      | DELETE | Exclui um usuário        | ✅                       |
 | `/task`      | GET    | Busca todas as Tasks     | ✅                       |
 | `/task`      | POST   | Cria uma nova Task       | ✅                       |
 | `/task/<id>` | GET    | Busca uma Task por ID    | ✅                       |

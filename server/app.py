@@ -6,9 +6,8 @@ from src.controllers.task.list_tasks import list_tasks
 from src.controllers.task.del_task import del_task
 from src.controllers.task.find_task import find_task
 from src.controllers.user.remove_user import remove_user
+from src.controllers.task.edit_task import edit_task
 from src.utils.decode_token import decode_token
-
-
 
 app = Flask(__name__)
 CORS(app)
@@ -71,7 +70,9 @@ def delete_task(id):
 
 @app.put("/task/<id>")
 def update_task(id):
-    return f'update task {id}'
+    data = request.json
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return edit_task(id, data, userId)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -6,3 +6,7 @@
 body {
   @apply h-[100vh] flex flex-col items-center justify-center;
 }
+
+*{
+  font-family: "Kanit", Arial, Helvetica, sans-serif
+}

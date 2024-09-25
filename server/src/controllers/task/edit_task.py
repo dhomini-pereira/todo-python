@@ -34,6 +34,7 @@ def edit_task(id, data, userId):
         'id': task.id,
         'title': task.title,
         'description': task.description,
+        'status': task.status,
         'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
         'updatedAt': task.updated.at.strftime('%Y-%m-%d %H:%M:%S')
     }), 200

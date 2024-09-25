@@ -8,6 +8,7 @@ from src.controllers.task.find_task import find_task
 from src.controllers.user.remove_user import remove_user
 from src.controllers.task.edit_task import edit_task
 from src.controllers.user.edit_user import edit_user
+from src.controllers.task.create_task import create_task
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
@@ -64,8 +65,10 @@ def get_task(id):
     return find_task(id, userId)
 
 @app.post("/task")
-def create_task(id):
-    return f'create task {id}'
+def post_task():
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    data = request.json
+    return create_task(userId, data)
 
 @app.delete("/task/<id>")
 def delete_task(id):

@@ -24,6 +24,7 @@ def list_tasks(filters, userId):
                 'id': task.id,
                 'title': task.title,
                 'description': task.description,
+                'status': task.status,
                 'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 'updatedAt': task.updated_at.strftime('%Y-%m-%d %H:%M:%S')
             } for task in tasks

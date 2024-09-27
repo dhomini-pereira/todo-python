@@ -12,6 +12,13 @@ from src.controllers.task.create_task import create_task
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
+from src.config.database import pg_db
+
+from src.models.task import Task
+from src.models.user import User
+from src.models.work_area import WorkArea
+from src.models.member_work_area import MemberWorkArea
+
 app = Flask(__name__)
 CORS(app)
 
@@ -82,4 +89,5 @@ def update_task(id):
     return edit_task(id, data, userId)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    # app.run(host="0.0.0.0", port=8000, debug=True)
+    pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

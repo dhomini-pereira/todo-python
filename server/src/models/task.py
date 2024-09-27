@@ -1,8 +1,9 @@
 import enum
 import datetime
 from peewee import AutoField, CharField, TextField, DateTimeField, ForeignKeyField
-from src.config.database import BaseModel
+from src.config.base_model import BaseModel
 from src.models.user import User
+from src.models.work_area import WorkArea
 
 class Status(enum.Enum):
     PENDING = 'PENDING'
@@ -13,10 +14,11 @@ class Task(BaseModel):
     id = AutoField()
     title = CharField(max_length=255)
     description = TextField(null=True)
-    status = CharField(max_length=255, default="PENDING")
+    status = CharField(max_length=20, default=Status.PENDING.value)
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
-    user_id = ForeignKeyField(User, backref='tasks', on_delete='CASCADE')
+    work_area = ForeignKeyField(WorkArea, backref='tasks', on_delete='CASCADE')
+    user = ForeignKeyField(User, backref='tasks')
 
     class Meta:
         db_table = 'tasks'

@@ -1,8 +1,7 @@
 export default function Page() {
   return (
     <div
-      className="relative w-full overflow-hidden"
-      style={{ height: "100dvh" }}
+      className="relative w-full overflow-hidden h-screen"
     >
       <video
         autoPlay

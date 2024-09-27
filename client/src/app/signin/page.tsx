@@ -37,8 +37,8 @@ export default function Page() {
         <meta name="theme-color" content="#030B19" />
       </header>
       <div
-        className="bg-cover bg-center w-full flex items-center justify-center flex-col font-body text-slate-200"
-        style={{ backgroundImage: `url(${background.src})`, height: "100dvh" }}
+        className="bg-cover bg-center w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200"
+        style={{ backgroundImage: `url(${background.src})`}}
       >
         <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md bg-zinc-900 rounded-3xl py-9 px-12">
           <form

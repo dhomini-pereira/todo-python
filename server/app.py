@@ -9,15 +9,15 @@ from src.controllers.user.remove_user import remove_user
 from src.controllers.task.edit_task import edit_task
 from src.controllers.user.edit_user import edit_user
 from src.controllers.task.create_task import create_task
+from src.controllers.workareas.list_workareas import list_workareas
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
-from src.config.database import pg_db
-
-from src.models.task import Task
-from src.models.user import User
-from src.models.work_area import WorkArea
-from src.models.member_work_area import MemberWorkArea
+# from src.config.database import pg_db
+# from src.models.task import Task
+# from src.models.user import User
+# from src.models.work_area import WorkArea
+# from src.models.member_work_area import MemberWorkArea
 
 app = Flask(__name__)
 CORS(app)
@@ -60,11 +60,16 @@ def update_user():
     data = request.json
     return edit_user(userId, data)
 
-@app.get("/task")
-def list_of_tasks():
+@app.get("/workarea/<id>/task")
+def list_of_tasks(id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.args
-    return list_tasks(data, userId)
+    return list_tasks(data, userId, id)
+
+@app.get("/workarea")
+def list_of_work_areas():
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return list_workareas(userId)
 
 @app.get("/task/<id>")
 def get_task(id):
@@ -89,5 +94,5 @@ def update_task(id):
     return edit_task(id, data, userId)
 
 if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=8000, debug=True)
-    pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])
+    app.run(host="0.0.0.0", port=8000, debug=True)
+    # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

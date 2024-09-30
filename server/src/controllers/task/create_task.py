@@ -1,14 +1,33 @@
 from src.models.task import Task
 from flask import jsonify
+from peewee import JOIN
+from src.models.member_work_area import MemberWorkArea
+from src.models.work_area import WorkArea
 
-def create_task(userId, data):
+def create_task(userId, data, workarea_id):
     if not data.get('title') or not data.get('description'):
         return jsonify({ 'error': 'Invalid data' }), 400
+
+    workarea = (
+        WorkArea
+        .select()
+        .join(MemberWorkArea, JOIN.LEFT_OUTER)
+        .where(
+            (
+                (MemberWorkArea.user == userId) |
+                (WorkArea.owner == userId)
+            ) &
+            (WorkArea.id == workarea_id)
+        )
+    )
     
+    if not workarea:
+        return jsonify({ 'error': 'Work area not found' }), 404
+
     task = Task(
-        user_id = userId,
         title = data.get('title'),
-        description = data.get('description')
+        description = data.get('description'),
+        work_area = workarea_id
     )
     task.save()
     

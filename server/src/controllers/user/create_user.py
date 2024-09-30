@@ -1,6 +1,7 @@
 from flask import jsonify
 import hashlib
 from src.models.user import User
+from src.models.work_area import WorkArea, TypeWorkArea
 
 def create_user(data):
     if not data.get('username') or not data.get('email') or not data.get('password'):
@@ -17,9 +18,18 @@ def create_user(data):
     )
     user.save()
 
+    workarea = WorkArea(
+        name=f'personal-{user.id}',
+        type_work_area=TypeWorkArea.PERSONAL.value,
+        owner=user.id
+    )
+    workarea.save()
+
     return jsonify({
+        'id': user.id,
         'username': user.username,
         'email': user.email,
+        'image_url': user.image_url,
         'createdAt': user.created_at
     }), 201
     

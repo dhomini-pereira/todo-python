@@ -9,8 +9,15 @@ from src.controllers.user.remove_user import remove_user
 from src.controllers.task.edit_task import edit_task
 from src.controllers.user.edit_user import edit_user
 from src.controllers.task.create_task import create_task
+from src.controllers.workareas.list_workareas import list_workareas
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
+
+# from src.config.database import pg_db
+# from src.models.task import Task
+# from src.models.user import User
+# from src.models.work_area import WorkArea
+# from src.models.member_work_area import MemberWorkArea
 
 app = Flask(__name__)
 CORS(app)
@@ -53,33 +60,39 @@ def update_user():
     data = request.json
     return edit_user(userId, data)
 
-@app.get("/task")
-def list_of_tasks():
+@app.get("/workarea/<workarea_id>/task")
+def list_of_tasks(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.args
-    return list_tasks(data, userId)
+    return list_tasks(data, userId, workarea_id)
 
-@app.get("/task/<id>")
-def get_task(id):
+@app.get("/workarea")
+def list_of_work_areas():
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return find_task(id, userId)
+    return list_workareas(userId)
 
-@app.post("/task")
-def post_task():
+@app.get("/workarea/<workarea_id>/task/<id>")
+def get_task(workarea_id, id):
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return find_task(workarea_id, id, userId)
+
+@app.post("/workarea/<workarea_id>/task")
+def post_task(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.json
-    return create_task(userId, data)
+    return create_task(userId, data, workarea_id)
 
-@app.delete("/task/<id>")
-def delete_task(id):
+@app.delete("/workarea/<workarea_id>/task/<id>")
+def delete_task(workarea_id, id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return del_task(id, userId)
+    return del_task(workarea_id, id, userId)
 
-@app.put("/task/<id>")
-def update_task(id):
+@app.put("/workarea/<workarea_id>/task/<id>")
+def update_task(workarea_id, id):
     data = request.json
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return edit_task(id, data, userId)
+    return edit_task(workarea_id, id, data, userId)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
+    # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

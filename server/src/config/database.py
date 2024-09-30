@@ -16,7 +16,3 @@ pg_db = PostgresqlDatabase(
     host=db_host,
     port=db_port
 )
-
-class BaseModel(Model):
-    class Meta:
-        database = pg_db

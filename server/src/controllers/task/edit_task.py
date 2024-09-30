@@ -1,12 +1,22 @@
 from src.models.task import Task
 from flask import jsonify
+from src.models.work_area import WorkArea
+from src.models.member_work_area import MemberWorkArea
+from peewee import JOIN
 import datetime
 
-def edit_task(id, data, userId):
-    task = Task.get(
-        Task.user_id == userId,
-        Task.id==id
-    )
+def edit_task(workarea_id, id, data, userId):
+    task = (
+        Task
+        .select()
+        .join(WorkArea, on=(Task.work_area == WorkArea.id))
+        .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.work_area == WorkArea.id))
+        .where(
+            WorkArea.id == workarea_id,
+            Task.id == id,
+            (WorkArea.owner == userId) | (MemberWorkArea.user == userId)
+        )
+    ).get()
     
     if not task:
         return jsonify({ 'error': 'Task not found' }), 404
@@ -14,7 +24,7 @@ def edit_task(id, data, userId):
     if not data:
         return jsonify({ 'error': 'Invalid data' }), 400
     
-    if not data.get('title') and not data.get('description') and not data.get('status'):
+    if not data.get('title') and not data.get('description') and not data.get('status') and not data.get('user_id'):
         return jsonify({ 'error': 'Invalid data' }), 400
     
     if (data.get('title')):
@@ -25,6 +35,9 @@ def edit_task(id, data, userId):
     
     if (data.get('status')):
         task.status = data.get('status')
+
+    if (data.get('user_id')):
+        task.user = data.get('user_id')
         
     task.updated_at = datetime.datetime.now()
     
@@ -36,5 +49,5 @@ def edit_task(id, data, userId):
         'description': task.description,
         'status': task.status,
         'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-        'updatedAt': task.updated.at.strftime('%Y-%m-%d %H:%M:%S')
+        'updatedAt': task.updated_at.strftime('%Y-%m-%d %H:%M:%S')
     }), 200

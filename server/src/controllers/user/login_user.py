@@ -22,6 +22,7 @@ def login_user(data):
         'id': user.id,
         'username': user.username,
         'email': user.email,
+        'image_url': user.image_url,
         'createdAt': user.created_at.strftime('%Y-%m-%d %H:%M:%S')
     })
     

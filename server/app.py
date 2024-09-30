@@ -60,38 +60,38 @@ def update_user():
     data = request.json
     return edit_user(userId, data)
 
-@app.get("/workarea/<id>/task")
-def list_of_tasks(id):
+@app.get("/workarea/<workarea_id>/task")
+def list_of_tasks(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.args
-    return list_tasks(data, userId, id)
+    return list_tasks(data, userId, workarea_id)
 
 @app.get("/workarea")
 def list_of_work_areas():
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return list_workareas(userId)
 
-@app.get("/task/<id>")
-def get_task(id):
+@app.get("/workarea/<workarea_id>/task/<id>")
+def get_task(workarea_id, id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return find_task(id, userId)
+    return find_task(workarea_id, id, userId)
 
-@app.post("/task")
-def post_task():
+@app.post("/workarea/<workarea_id>/task")
+def post_task(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.json
-    return create_task(userId, data)
+    return create_task(userId, data, workarea_id)
 
-@app.delete("/task/<id>")
-def delete_task(id):
+@app.delete("/workarea/<workarea_id>/task/<id>")
+def delete_task(workarea_id, id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return del_task(id, userId)
+    return del_task(workarea_id, id, userId)
 
-@app.put("/task/<id>")
-def update_task(id):
+@app.put("/workarea/<workarea_id>/task/<id>")
+def update_task(workarea_id, id):
     data = request.json
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return edit_task(id, data, userId)
+    return edit_task(workarea_id, id, data, userId)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -7,7 +7,7 @@ def create_workarea(userId, data):
 
     workarea = WorkArea(
         name=data.get('name'),
-        type_work_area=TypeWorkArea.PROFESSIONAL,
+        type_work_area=TypeWorkArea.PROFESSIONAL.value,
         owner_id=userId
     )
     workarea.save()

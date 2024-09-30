@@ -18,7 +18,7 @@ class Task(BaseModel):
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
     work_area = ForeignKeyField(WorkArea, backref='tasks', on_delete='CASCADE')
-    user = ForeignKeyField(User, backref='tasks')
+    user = ForeignKeyField(User, null=True, backref='tasks')
 
     class Meta:
         db_table = 'tasks'

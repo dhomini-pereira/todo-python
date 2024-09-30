@@ -1,6 +1,7 @@
 from src.models.task import Task
 from src.models.work_area import WorkArea
 from src.models.member_work_area import MemberWorkArea
+from peewee import JOIN
 from flask import jsonify
 
 def list_tasks(filters, userId, id):
@@ -10,18 +11,15 @@ def list_tasks(filters, userId, id):
 
     query = (
         Task
-            .select()
-            .join(
-                MemberWorkArea,
-                WorkArea
-            )
-            .where(
-                Task.work_area == id,
-                MemberWorkArea.work_area == Task.work_area,
-                MemberWorkArea.user == userId,
-                WorkArea.id == MemberWorkArea.work_area
-            )
+        .select()
+        .join(WorkArea, on=(Task.work_area == WorkArea.id))
+        .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.work_area == WorkArea.id))
+        .where(
+            WorkArea.id == id,
+            (WorkArea.owner == userId) | (MemberWorkArea.user == userId)
+        )
     )
+
     
     if status:
         query = query.where(Task.status == status)

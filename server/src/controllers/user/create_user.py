@@ -20,7 +20,7 @@ def create_user(data):
 
     workarea = WorkArea(
         name=f'personal-{user.id}',
-        type_work_area=TypeWorkArea.PERSONAL,
+        type_work_area=TypeWorkArea.PERSONAL.value,
         owner=user.id
     )
     workarea.save()

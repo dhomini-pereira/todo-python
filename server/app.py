@@ -13,6 +13,7 @@ from src.controllers.workareas.list_workareas import list_workareas
 from src.controllers.workareas.delete_workarea import delete_workarea
 from src.controllers.workareas.user_in_workarea import user_in_workarea
 from src.controllers.workareas.remove_user_workarea import remove_user_workarea
+from src.controllers.workareas.create_workarea import create_workarea
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
@@ -106,10 +107,16 @@ def insert_user_in_workarea(workarea_id, username):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return user_in_workarea(userId, workarea_id, username)
 
-@app.post("/workarea/<workarea_id>/member/<username>")
+@app.delete("/workarea/<workarea_id>/member/<username>")
 def remove_user_of_workarea(workarea_id, username):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return remove_user_workarea(userId, workarea_id, username)
+
+@app.post("/workarea")
+def new_workarea():
+    data = request.json
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return create_workarea(userId, data)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

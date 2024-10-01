@@ -8,7 +8,7 @@ def remove_user_workarea(userId, workareaId, username):
     try:
         workarea = WorkArea.get(id=workareaId)
 
-        if workarea.owner != userId:
+        if workarea.owner.id != userId:
             return jsonify({'message': 'You are not the owner of this workarea'}), 403
         
         if workarea.type_work_area == TypeWorkArea.PERSONAL.value:

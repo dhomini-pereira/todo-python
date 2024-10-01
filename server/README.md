@@ -14,19 +14,22 @@ Esta é uma API criada utilizando Flask para definição de Endpoints para a bus
 
 ### Endpoints
 
-| Rota                       | Método | Descrição                | Necessita de autorização |
-| -------------------------- | ------ | ------------------------ | ------------------------ |
-| `/signin`                  | POST   | Autentica um usuário     | ❌                       |
-| `/signup`                  | POST   | Registra um usuário      | ❌                       |
-| `/user`                    | PUT    | Atualiza um usuário      | ✅                       |
-| `/user`                    | DELETE | Exclui um usuário        | ✅                       |
-| `/workarea/<id>/task`      | GET    | Busca todas as Tasks     | ✅                       |
-| `/workarea/<id>/task`      | POST   | Cria uma nova Task       | ✅                       |
-| `/workarea/<id>/task/<id>` | GET    | Busca uma Task por ID    | ✅                       |
-| `/workarea/<id>/task/<id>` | PUT    | Atualiza uma Task por ID | ✅                       |
-| `/workarea/<id>/task/<id>` | DELETE | Exclui uma Task por ID   | ✅                       |
-| `/workarea`                | GET    | Busca todas as Workareas | ✅                       |
-| `/workarea`                | POST   | Cria uma nova Workarea   | ✅                       |`
+| Rota                                        | Método | Descrição                          | Necessita de autorização |
+| ------------------------------------------- | ------ | ---------------------------------- | ------------------------ |
+| `/signin`                                   | POST   | Autentica um usuário               | ❌                       |
+| `/signup`                                   | POST   | Registra um usuário                | ❌                       |
+| `/user`                                     | PUT    | Atualiza um usuário                | ✅                       |
+| `/user`                                     | DELETE | Exclui um usuário                  | ✅                       |
+| `/workarea/<id>/task`                       | GET    | Busca todas as Tasks               | ✅                       |
+| `/workarea/<id>/task`                       | POST   | Cria uma nova Task                 | ✅                       |
+| `/workarea/<id>/task/<id>`                  | GET    | Busca uma Task por ID              | ✅                       |
+| `/workarea/<id>/task/<id>`                  | PUT    | Atualiza uma Task por ID           | ✅                       |
+| `/workarea/<id>/task/<id>`                  | DELETE | Exclui uma Task por ID             | ✅                       |
+| `/workarea`                                 | GET    | Busca todas as Workareas           | ✅                       |
+| `/workarea`                                 | POST   | Cria uma nova Workarea             | ✅                       |
+| `/workarea/<id>`                            | DELETE | Exclui uma Workarea por ID         | ✅                       |
+| `/workarea/<workarea_id>/member/<username>` | POST   | Adiciona um usuário a uma Workarea | ✅                       |
+| `/workarea/<workarea_id>/member/<username>` | DELETE | Remove um usuário de uma Workarea  | ✅                       |
 
 ### Segurança
 

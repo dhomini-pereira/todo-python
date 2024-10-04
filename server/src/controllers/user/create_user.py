@@ -32,7 +32,8 @@ def create_user(data):
             'username': user.username,
             'email': user.email,
             'image_url': user.image_url,
-            'createdAt': user.created_at
+            'createdAt': user.created_at.isoformat(),
+            'updatedAt': user.updated_at.isoformat()
         }), 201
 
     except IntegrityError:

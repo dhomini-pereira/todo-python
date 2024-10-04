@@ -7,7 +7,7 @@ class User(BaseModel):
     username = CharField(max_length=255, unique=True)
     email = CharField(max_length=255, unique=True)
     password = CharField(max_length=255)
-    image_url = CharField(max_length=255, null=True)
+    image_url = CharField(max_length=255, null=True, default=None)
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
     

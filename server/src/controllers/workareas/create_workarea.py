@@ -18,7 +18,8 @@ def create_workarea(userId, data):
             'id': workarea.id,
             'name': workarea.name,
             'type': workarea.type_work_area,
-            'createdAt': workarea.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'createdAt': workarea.created_at.isoformat(),
+            'updatedAt': workarea.updated_at.isoformat()
         }), 201
 
     except IntegrityError:

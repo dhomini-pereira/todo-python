@@ -4,6 +4,7 @@ from src.models.member_work_area import MemberWorkArea
 from src.models.task import Task
 from src.models.work_area import WorkArea
 from peewee import JOIN
+from datetime import datetime
 
 def create_task(userId, data, workarea_id):
     if not data.get('title') or not data.get('description'):
@@ -29,7 +30,9 @@ def create_task(userId, data, workarea_id):
         task = Task(
             title=data.get('title'),
             description=data.get('description'),
-            work_area=workarea_id
+            work_area=workarea_id,
+            time_estimate=datetime.fromisoformat(data.get('timeEstimate')) if data.get('timeEstimate') else None,
+            user=data.get('userId') if data.get('userId') else None
         )
         task.save()
 
@@ -38,8 +41,10 @@ def create_task(userId, data, workarea_id):
             'title': task.title,
             'description': task.description,
             'status': task.status,
-            'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updatedAt': task.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            'timeEstimate': task.time_estimate.isoformat() if task.time_estimate else None,
+            'userId': task.user.id if task.user else None,
+            'createdAt': task.created_at.isoformat(),
+            'updatedAt': task.updated_at.isoformat()
         }), 201
 
     except DoesNotExist:

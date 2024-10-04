@@ -1,6 +1,6 @@
 import enum
 import datetime
-from peewee import AutoField, CharField, TextField, DateTimeField, ForeignKeyField
+from peewee import AutoField, CharField, TextField, DateTimeField, ForeignKeyField, DateField
 from src.config.base_model import BaseModel
 from src.models.user import User
 from src.models.work_area import WorkArea
@@ -15,10 +15,11 @@ class Task(BaseModel):
     title = CharField(max_length=255)
     description = TextField(null=True)
     status = CharField(max_length=20, default=Status.PENDING.value)
+    time_estimate = DateField(null=True, default=None)
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
     work_area = ForeignKeyField(WorkArea, backref='tasks', on_delete='CASCADE')
-    user = ForeignKeyField(User, null=True, backref='tasks')
+    user = ForeignKeyField(User, null=True, backref='tasks', on_delete='SET NULL')
 
     class Meta:
         db_table = 'tasks'

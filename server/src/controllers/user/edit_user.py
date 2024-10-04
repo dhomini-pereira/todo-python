@@ -30,8 +30,8 @@ def edit_user(userId, data):
             'username': user.username,
             'email': user.email,
             'image_url': user.image_url,
-            'createdAt': user.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updatedAt': user.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            'createdAt': user.created_at.isoformat(),
+            'updatedAt': user.updated_at.isoformat()
         }), 200
 
     except DoesNotExist:

@@ -4,7 +4,7 @@ from src.models.member_work_area import MemberWorkArea
 from src.models.task import Task
 from src.models.work_area import WorkArea
 from peewee import JOIN
-import datetime
+from datetime import datetime
 
 def edit_task(workarea_id, id, data, userId):
     try:
@@ -26,7 +26,7 @@ def edit_task(workarea_id, id, data, userId):
         if not data:
             return jsonify({'error': 'Invalid data'}), 400
 
-        if not data.get('title') and not data.get('description') and not data.get('status') and not data.get('user_id'):
+        if not data.get('title') and not data.get('description') and not data.get('status') and not data.get('user_id') and not data.get('timeEstimate'):
             return jsonify({'error': 'Invalid data'}), 400
 
         if data.get('title'):
@@ -41,7 +41,10 @@ def edit_task(workarea_id, id, data, userId):
         if data.get('user_id'):
             task.user = data.get('user_id')
 
-        task.updated_at = datetime.datetime.now()
+        if data.get('timeEstimate'):
+            task.time_estimate = datetime.fromisoformat(data.get('timeEstimate'))
+
+        task.updated_at = datetime.now()
         task.save()
 
         return jsonify({
@@ -49,8 +52,10 @@ def edit_task(workarea_id, id, data, userId):
             'title': task.title,
             'description': task.description,
             'status': task.status,
-            'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'updatedAt': task.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            'timeEstimate': task.time_estimate.isoformat() if task.time_estimate else None,
+            'userId': task.user.id if task.user else None,
+            'createdAt': task.created_at.isoformat(),
+            'updatedAt': task.updated_at.isoformat()
         }), 200
 
     except DoesNotExist:

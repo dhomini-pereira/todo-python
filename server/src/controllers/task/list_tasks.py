@@ -38,8 +38,10 @@ def list_tasks(filters, userId, id):
                     'title': task.title,
                     'description': task.description,
                     'status': task.status,
-                    'createdAt': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                    'updatedAt': task.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+                    'userId': task.user.id if task.user else None,
+                    'timeEstimate': task.time_estimate.isoformat() if task.time_estimate else None,
+                    'createdAt': task.created_at.isoformat(),
+                    'updatedAt': task.updated_at.isoformat()
                 } for task in tasks
             ],
             'total': task_total

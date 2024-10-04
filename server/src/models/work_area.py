@@ -10,9 +10,9 @@ class TypeWorkArea(enum.Enum):
 
 class WorkArea(BaseModel):
     id = AutoField()
-    name = CharField()
-    type_work_area = CharField()
-    owner = ForeignKeyField(User, backref='owned_workareas')
+    name = CharField(max_length=255)
+    type_work_area = CharField(max_length=255, choices=[(tag.name, tag.value) for tag in TypeWorkArea])
+    owner = ForeignKeyField(User, backref='owned_workareas', on_delete='CASCADE')
     created_at = DateTimeField(default=datetime.now)
     updated_at = DateTimeField(default=datetime.now)
 

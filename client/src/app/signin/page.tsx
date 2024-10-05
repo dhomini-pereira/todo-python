@@ -1,6 +1,9 @@
 "use client";
 import { useForm } from "react-hook-form";
 import background from "../../assets/backgroundSession.jpg";
+import api from "@/services/api.service";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type IUser = {
   email: string;
@@ -10,24 +13,13 @@ type IUser = {
 export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
 
-  async function handleSignIn(e: IUser) {
+  async function handleSignIn(user: IUser) {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const response = await fetch(`${apiUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(e),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        sessionStorage.setItem("token", data.token);
-      } else {
-        alert("Ocorreu um erro, tente novamente mais tarde.");
-      }
-    } catch {
-      alert("Ocorreu um erro, tente novamente mais tarde.");
+      const response = await api.post(`${API_URL}/signin`, user);
+
+      sessionStorage.setItem("TOKEN", response.data.TOKEN);
+    } catch (err: any) {
+      alert(err.response.data.error);
     }
   }
 
@@ -38,7 +30,7 @@ export default function Page() {
       </header>
       <div
         className="bg-cover bg-center w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200"
-        style={{ backgroundImage: `url(${background.src})`}}
+        style={{ backgroundImage: `url(${background.src})` }}
       >
         <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md bg-zinc-900 rounded-3xl py-9 px-12">
           <form
@@ -69,7 +61,7 @@ export default function Page() {
               className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200"
               type="submit"
             >
-              Sign up
+              Sign in
             </button>
           </form>
         </div>

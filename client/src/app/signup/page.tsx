@@ -1,6 +1,10 @@
 "use client";
 import { useForm } from "react-hook-form";
 import background from "../../assets/backgroundSession.jpg";
+import api from "@/services/api.service";
+import { useRouter } from "next/navigation";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type IUser = {
   username: string;
@@ -10,28 +14,16 @@ type IUser = {
 
 export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
+  const router = useRouter();
 
-  async function handleSignUp(e: IUser) {
+  async function handleSignUp(user: IUser) {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      await api.post(`${API_URL}/signup`, user);
 
-      const response = await fetch(`${apiUrl}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(e),
-      });
-
-      if (response.ok) {
-        return (window.location.href = "/signin");
-      } else {
-        alert("Ocorreu um erro, tente novamente mais tarde.");
-        return window.location.reload;
-      }
-    } catch (e) {
-      alert("Ocorreu um erro, tente novamente mais tarde.");
-      return window.location.reload;
+      router.push("/signin");
+    } catch (err: any) {
+      alert(err.response.data.error);
+      return router.refresh();
     }
   }
 
@@ -42,7 +34,7 @@ export default function Page() {
       </header>
       <div
         className="bg-cover bg-center w-full h-screen flex items-center justify-center flex-col font-body text-slate-200 overflow-y-auto"
-        style={{ backgroundImage: `url(${background.src})`}}
+        style={{ backgroundImage: `url(${background.src})` }}
       >
         <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md bg-zinc-900 rounded-3xl py-9 px-12">
           <form

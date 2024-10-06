@@ -28,6 +28,9 @@ CORS(app)
 
 @app.before_request
 def validar_token():
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "CORS preflight request allowed."}), 200
+    
     if request.path in ['/signup', '/signin']:
         return None
     

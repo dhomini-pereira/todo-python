@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 
 export default function Navbar() {
   const [sidebarState, setSideBarState] = useState(true);

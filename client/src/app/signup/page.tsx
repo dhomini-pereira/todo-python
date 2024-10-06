@@ -18,7 +18,8 @@ export default function Page() {
 
   async function handleSignUp(user: IUser) {
     try {
-      await api.post(`${API_URL}/signup`, user);
+      const url = `${API_URL}/signup`;
+      await api.post(url, user);
 
       router.push("/signin");
     } catch (err: any) {

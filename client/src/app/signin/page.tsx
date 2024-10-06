@@ -15,9 +15,10 @@ export default function Page() {
 
   async function handleSignIn(user: IUser) {
     try {
-      const response = await api.post(`${API_URL}/signin`, user);
+      const url = `${API_URL}/signin`;
+      const response = await api.post(url, user);
 
-      sessionStorage.setItem("TOKEN", response.data.TOKEN);
+      sessionStorage.setItem("TOKEN", response.data.token);
     } catch (err: any) {
       alert(err.response.data.error);
     }

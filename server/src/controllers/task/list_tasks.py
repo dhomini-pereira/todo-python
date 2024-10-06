@@ -7,6 +7,19 @@ from peewee import JOIN
 
 def list_tasks(filters, userId, id):
     try:
+        work_area_query = (
+            WorkArea
+            .select()
+            .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.work_area == WorkArea.id))
+            .where(
+                WorkArea.id == id,
+                (WorkArea.owner == userId) | (MemberWorkArea.user == userId)
+            )
+        )
+
+        if not work_area_query.exists():
+            return jsonify({'error': 'Forbidden: User does not have access to this work area'}), 403
+
         page = int(filters.get('page', 1))
         status = filters.get('status')
         text = filters.get('text')
@@ -30,6 +43,9 @@ def list_tasks(filters, userId, id):
 
         tasks = query.order_by(Task.created_at.desc()).limit(10).offset((page - 1) * 10)
         task_total = query.count()
+
+        if not tasks:
+            return jsonify({'error': 'No tasks found'}), 404
 
         tasks_obj = {
             'tasks': [

@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Sidebar from "../sidebar/Sidebar";
+import { useNavbar } from "@/context/NavbarContext";
 
 export default function Navbar() {
-  const [sidebarState, setSideBarState] = useState(true);
+  const { isActive, toggle } = useNavbar();
 
   const user = {
     username: "dhpe",
@@ -11,15 +12,9 @@ export default function Navbar() {
   };
 
   return (
-    <div
-      className="w-screen text-slate-200 h-12 text-lg flex items-center justify-between pl-4 pr-4"
-      style={{ backgroundColor: "#0A070E" }}
-    >
+    <div className="bg-[#0A070E] w-screen text-slate-200 h-12 text-lg flex items-center justify-between pl-4 pr-10">
       <div className="w-fit flex items-center sm:gap-10">
-        <Sidebar
-          MenuIsActive={sidebarState}
-          handle={() => setSideBarState((sidebarState) => !sidebarState)}
-        />
+        <Sidebar MenuIsActive={isActive} handle={toggle} />
         <h1>ToDo App</h1>
       </div>
 

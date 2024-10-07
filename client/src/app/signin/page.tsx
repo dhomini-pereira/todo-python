@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import background from "../../assets/backgroundSession.jpg";
 import api from "@/services/api.service";
+import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,6 +13,7 @@ type IUser = {
 
 export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
+  const router = useRouter()
 
   async function handleSignIn(user: IUser) {
     try {
@@ -19,6 +21,7 @@ export default function Page() {
       const response = await api.post(url, user);
 
       sessionStorage.setItem("TOKEN", response.data.token);
+      router.push("/workarea")
     } catch (err: any) {
       alert(err.response.data.error);
     }

@@ -1,11 +1,74 @@
+"use client";
 import Navbar from "@/components/navbar/Navbar";
-import React from "react";
+import { useNavbar } from "@/context/NavbarContext";
+import api from "@/services/api.service";
+import React, { useEffect, useState } from "react";
+
+type IWorkarea = {
+  createdAt: string;
+  id: number;
+  name: string;
+  type: "PERSONAL" | "PROFESSIONAL";
+  updatedAt: string;
+};
+
+type IResponseWorkarea = {
+  workareas: IWorkarea[];
+};
 
 export default function page() {
+  const { isActive } = useNavbar();
+  const [workareas, setWorkareas] = useState<IWorkarea[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const { data }: { data: IResponseWorkarea } = await api.get(
+          `${apiUrl}/workarea`
+        );
+        setWorkareas(data.workareas);
+      } catch (e: any) {
+        alert(e.response.data.error);
+      }
+    })();
+  }, []);
+
   return (
-    <div className="h-full bg-slate-900">
+    <div className="h-full">
       <Navbar />
-      <h1>Conteúdo</h1>
+      <div
+        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full ${
+          isActive ? "w-[calc(100vw-64px)]" : "w-full"
+        }`}
+      >
+        <div className="bg-slate-900 h-[100%] rounded-tl-[150px] flex items-end justify-center">
+          <div className="h-[90%] block w-[80%]">
+            <h1 className="text-5xl text-slate-200">Work Areas</h1>
+            <p className="text-slate-500">
+              Manage All your activities in a single screen.
+            </p>
+            <div className=" mt-8">
+              {workareas?.map((workarea) => (
+                <a href={`/workarea/${workarea.id}`}>
+                  <div
+                    key={workarea.id}
+                    className="w-[20%] h-[175px] rounded-xl bg-sky-700 flex items-center justify-center flex-col gap hover:bg-sky-800 cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]"
+                  >
+                    <h2 className="text-3xl text-slate-200 max-lg:text-xl">
+                      {workarea.name}
+                    </h2>
+                    <span className="text-slate-400 max-lg:text-sm">
+                      {new Date(workarea.createdAt).toLocaleDateString("pt-BR")}
+                    </span>
+                    <p className="text-sm text-slate-400">{workarea.type}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -48,12 +48,12 @@ export default function page() {
             <p className="text-slate-500">
               Manage All your activities in a single screen.
             </p>
-            <div className=" mt-8">
+            <div className="mt-8 flex flex-wrap gap-2 max-md:flex-col max-w-[1000px] overflow-y-auto">
               {workareas?.map((workarea) => (
-                <a href={`/workarea/${workarea.id}`}>
+                <a href={`/workarea/${workarea.id}`} className="w-[25%] max-md:w-full">
                   <div
                     key={workarea.id}
-                    className="w-[20%] h-[175px] rounded-xl bg-sky-700 flex items-center justify-center flex-col gap hover:bg-sky-800 cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]"
+                    className="w-[100%] h-[175px] text-center rounded-xl bg-sky-700 flex items-center justify-center flex-col gap hover:bg-sky-800 cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]"
                   >
                     <h2 className="text-3xl text-slate-200 max-lg:text-xl">
                       {workarea.name}

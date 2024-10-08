@@ -36,7 +36,7 @@ def validar_token():
     
     auth_header = request.headers.get('Authorization')
     if not auth_header:
-        return jsonify({"error": "Token não fornecido!"}), 401
+        return jsonify({"error": "Token não fornecido"}), 401
 
     token_data = decode_token(auth_header)
     

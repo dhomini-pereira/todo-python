@@ -36,7 +36,7 @@ def validar_token():
     
     auth_header = request.headers.get('Authorization')
     if not auth_header:
-        return jsonify({"error": "Token não fornecido"}), 401
+        return jsonify({"error": "Token não fornecido!"}), 401
 
     token_data = decode_token(auth_header)
     
@@ -121,6 +121,6 @@ def new_workarea():
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return create_workarea(userId, data)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+# if __name__ == "__main__":
+    # app.run(host="0.0.0.0", port=8000, debug=True)
     # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

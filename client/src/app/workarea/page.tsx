@@ -28,7 +28,11 @@ export default function page() {
           `${apiUrl}/workarea`
         );
         setWorkareas(
-          data.workareas.sort((a, b) => (a.type === "PERSONAL" ? -1 : 0))
+          data.workareas.sort((a, b) => {
+            if (a.type === "PERSONAL") return -1;
+            if (b.type === "PERSONAL") return 1;
+            return 0;
+          });
         );
       } catch (e: any) {
         alert(e.response.data.error);

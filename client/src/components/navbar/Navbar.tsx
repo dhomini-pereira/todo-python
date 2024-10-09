@@ -1,15 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import { useNavbar } from "@/context/NavbarContext";
+import api from "@/services/api.service";
+
+type IUser = {
+  createdAt: string;
+  email: string;
+  id: number;
+  image_url: string | null;
+  username: string;
+};
 
 export default function Navbar() {
   const { isActive, toggle } = useNavbar();
+  const [user, setUser] = useState<IUser>();
 
-  const user = {
-    username: "dhpe",
-    image_url: "https://avatars.githubusercontent.com/u/69544085?v=4",
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await api.get(`${apiUrl}/user`);
+        const data: IUser = response.data;
+        setUser(data);
+      } catch (e: any) {
+        alert(e.response.data.error);
+      }
+    })();
+  }, []);
 
   return (
     <div className="bg-[#0A070E] w-screen text-slate-200 h-12 text-lg flex items-center justify-between pl-4 pr-10">

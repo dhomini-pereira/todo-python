@@ -27,7 +27,11 @@ export default function page() {
         const { data }: { data: IResponseWorkarea } = await api.get(
           `${apiUrl}/workarea`
         );
-        setWorkareas(data.workareas);
+        setWorkareas(
+          data.workareas.sort((a, b) => {
+            return a.type === "PROFESSIONAL" ? 0 : -1;
+          })
+        );
       } catch (e: any) {
         alert(e.response.data.error);
       }
@@ -50,7 +54,10 @@ export default function page() {
             </p>
             <div className="mt-8 flex flex-wrap gap-2 max-md:flex-col max-w-[1000px] overflow-y-auto">
               {workareas?.map((workarea) => (
-                <a href={`/workarea/${workarea.id}`} className="w-[25%] max-md:w-full">
+                <a
+                  href={`/workarea/${workarea.id}`}
+                  className="w-[25%] max-md:w-full"
+                >
                   <div
                     key={workarea.id}
                     className="w-[100%] h-[175px] text-center rounded-xl bg-sky-700 flex items-center justify-center flex-col gap hover:bg-sky-800 cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]"

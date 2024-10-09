@@ -67,6 +67,11 @@ def update_user():
     data = request.json
     return edit_user(userId, data)
 
+@app.get("/user")
+def get_user():
+    user = decode_token(request.headers.get('Authorization')).get('data')
+    return jsonify(user)
+
 @app.get("/workarea/<workarea_id>/task")
 def list_of_tasks(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')

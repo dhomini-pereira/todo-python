@@ -32,7 +32,7 @@ export default function page() {
             if (a.type === "PERSONAL") return -1;
             if (b.type === "PERSONAL") return 1;
             return 0;
-          });
+          })
         );
       } catch (e: any) {
         alert(e.response.data.error);

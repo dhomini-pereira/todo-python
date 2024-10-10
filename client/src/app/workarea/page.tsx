@@ -16,7 +16,7 @@ type IResponseWorkarea = {
   workareas: IWorkarea[];
 };
 
-export default function page() {
+export default function WorkArea() {
   const { isActive } = useNavbar();
   const [workareas, setWorkareas] = useState<IWorkarea[]>([]);
 

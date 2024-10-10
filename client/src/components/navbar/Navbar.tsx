@@ -41,7 +41,7 @@ export default function Navbar() {
           <img
             src={user?.image_url}
             alt={user?.username}
-            className="h-9 rounded-full"
+            className="h-9 w-9 object-cover rounded-full"
           />
         ) : (
           <svg

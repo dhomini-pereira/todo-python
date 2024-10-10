@@ -57,7 +57,7 @@ export default function WorkArea() {
             <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:grid">
               {workareas?.map((workarea, index) => (
                 <a
-                  href={`/workarea/${workarea.id}`}
+                  href={`/workarea/${workarea.id}?title=${workarea.name}`}
                   className="w-[18%] max-md:w-full md:max-w-[300px]"
                 >
                   <div

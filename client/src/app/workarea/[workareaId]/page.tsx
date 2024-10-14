@@ -61,9 +61,24 @@ export default function WorkAreaInfo() {
         const url = `${API_URL}/workarea/${workareaId}/task?page=${page}`;
         const [pendingTasks, progressingTasks, doneTasks, workarea] =
           await Promise.all([
-            api.get(url + "&status=PENDING"),
-            api.get(url + "&status=PROGRESSING"),
-            api.get(url + "&status=DONE"),
+            api.get(url + "&status=PENDING").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
+            api.get(url + "&status=PROGRESSING").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
+            api.get(url + "&status=DONE").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
             api.get(`${API_URL}/workarea/${workareaId}`),
           ]);
 
@@ -78,7 +93,7 @@ export default function WorkAreaInfo() {
         setTasks(httpResponse);
       } catch (err: any) {
         console.log(err);
-        alert(err.response.data.error);
+        alert(err.response?.data?.error || "Erro desconhecido");
       }
     })();
   }, [hydrated, workareaId, page]);
@@ -129,7 +144,7 @@ export default function WorkAreaInfo() {
   };
 
   if (!hydrated) {
-    return null; // Renderiza nada durante a hidratação inicial
+    return null;
   }
 
   return (

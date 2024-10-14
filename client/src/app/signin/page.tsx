@@ -13,7 +13,7 @@ type IUser = {
 
 export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
-  const router = useRouter()
+  const router = useRouter();
 
   async function handleSignIn(user: IUser) {
     try {
@@ -21,7 +21,7 @@ export default function Page() {
       const response = await api.post(url, user);
 
       sessionStorage.setItem("TOKEN", response.data.token);
-      router.push("/workarea")
+      router.push("/workarea");
     } catch (err: any) {
       alert(err.response.data.error);
     }

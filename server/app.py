@@ -126,6 +126,6 @@ def new_workarea():
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return create_workarea(userId, data)
 
-# if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=8000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=False)
     # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

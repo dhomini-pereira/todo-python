@@ -22,6 +22,7 @@ jobs:
         replicas: 3
         docker-network: ingress
         docker-published-port: 80
+        region: sa-east-1
         docker-target-port: 8000
         docker-opts: "--log-driver=awslogs --log-opt awslogs-group=my-logs --log-opt awslogs-region=us-east-1"
         prune: true

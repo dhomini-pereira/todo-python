@@ -20,9 +20,15 @@ jobs:
       run: |
         ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
           mkdir -p /home/ec2-user/app
+
           scp -i private_key.pem -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
+
           cd /home/ec2-user/app/server
-          docker-compose down
-          docker-compose pull
-          docker-compose up -d
+
+          docker build -t todo-python-app .
+
+          docker stop todo-python-service || true
+          docker rm todo-python-service || true
+
+          docker run -d --name todo-python-service -p 80:8000 todo-python-app
         EOF

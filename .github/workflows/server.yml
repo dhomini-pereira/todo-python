@@ -1,11 +1,11 @@
-name: Deploy NextJS App in AWS EC2
+name: Deploy Python App in AWS EC2
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'client/**'
+      - 'server/**'
 
 jobs:
   build-test-deploy:
@@ -24,9 +24,9 @@ jobs:
       - name: Build and Push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./client
+          context: ./server
           push: true
-          tags: jovemhero/todo-python-front:latest
+          tags: jovemhero/todopython-api:latest
           
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
@@ -36,8 +36,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
-            docker stop todo-python-front || true
-            docker rm todo-python-front || true
-            docker image rm ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest
-            docker run -d --name todo-python-front -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest
+            docker stop todopython-api || true
+            docker rm todopython-api || true
+            docker image rm ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest
+            docker run -d --name todopython-api -e DB_USER=${{ secrets.DB_USER }} -e DB_PASS=${{ secrets.DB_PASS }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} -e SECRET_TOKEN=${{ secrets.SECRET_TOKEN }} -e R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }} -e R2_ENDPOINT_URL=${{ secrets.R2_ENDPOINT_URL }} -e R2_BUCKET_NAME=${{ secrets.R2_BUCKET_NAME }} -e R2_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }} -e DB_PORT=${{ secrets.DB_PORT }} -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest

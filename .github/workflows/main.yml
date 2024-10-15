@@ -19,7 +19,7 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ec2-15-228-254-16.sa-east-1.compute.amazonaws.com >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Execute remote command
         run: |

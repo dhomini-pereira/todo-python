@@ -14,10 +14,13 @@ jobs:
     - name: Create SSH directory
       run: mkdir -p ~/.ssh
 
+    - name: Add SSH known hosts
+      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
     - name: Deploy to EC2
       run: |
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-        ssh -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_KEY }}") ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
+        echo "Attempting to connect to EC2..."
+        ssh -v -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_KEY }}") ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
           mkdir -p /home/ec2-user/app
           scp -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_KEY }}") -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
 

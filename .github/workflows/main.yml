@@ -1,25 +1,24 @@
-name: Deploy
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout código
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configurar SSH
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Conectar e executar comando remoto
+      - name: Execute remote command
         run: |
           ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_HOST }}" "comando_a_ser_executado"

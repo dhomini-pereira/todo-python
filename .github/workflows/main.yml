@@ -23,7 +23,17 @@ jobs:
 
           scp -i private_key.pem -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
 
-          cd /home/ec2-user/app/server
+          if [ ! -d "/home/ec2-user/app/server" ]; then
+            echo "Erro: a pasta server não foi copiada com sucesso."
+            exit 1
+          fi
+
+          cd /home/ec2-user/app/server || { echo "Erro ao entrar no diretório"; exit 1; }
+
+          if [ ! -f "Dockerfile" ]; then
+            echo "Erro: Dockerfile não encontrado."
+            exit 1
+          fi
 
           docker build -t todo-python-app .
 

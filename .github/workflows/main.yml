@@ -33,6 +33,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
             docker stop todopython-api || true
             docker rm todopython-api || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest

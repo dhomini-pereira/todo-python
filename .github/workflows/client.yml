@@ -1,4 +1,4 @@
-name: Docker CI/CD Pipeline
+name: Deploy Python App in AWS EC2
 
 on:
   push:

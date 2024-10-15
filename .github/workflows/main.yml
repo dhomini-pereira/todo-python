@@ -16,11 +16,11 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ec2-15-228-254-16.sa-east-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa.pem
+          chmod 400 ~/.ssh/id_rsa.pem
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       - name: Execute remote command
         run: |
-          ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_HOST }}" "comando_a_ser_executado"
+          ssh -i ~/.ssh/id_rsa.pem -o StrictHostKeyChecking=no "${{ secrets.SSH_HOST }}" "comando_a_ser_executado"

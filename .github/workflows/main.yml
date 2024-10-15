@@ -11,17 +11,12 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v3
 
-    - name: Copy SSH key
-      run: |
-        echo "${{ secrets.SSH_KEY }}" > private_key.pem
-        chmod 600 private_key.pem
-
     - name: Deploy to EC2
       run: |
-        ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        ssh -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_KEY }}") ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
           mkdir -p /home/ec2-user/app
-
-          scp -i private_key.pem -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
+          scp -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_KEY }}") -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
 
           if [ ! -d "/home/ec2-user/app/server" ]; then
             echo "Erro: a pasta server não foi copiada com sucesso."

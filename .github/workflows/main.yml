@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: EC2 Docker service deploy action
+      uses: bbharathkumarreddy/ec2-docker-service-deploy-action@v2.0
+      with:
+        ssh-host: ${{ secrets.SSH_HOST }}
+        ssh-key: ${{ secrets.SSH_KEY }}
+        ssh-port: 22
+        ssh-username: ec2-user
+        docker-service: todo-python-service
+        docker-image: todo-python-app:latest
+        replicas: 3
+        docker-network: ingress
+        docker-published-port: 80
+        docker-target-port: 8000
+        docker-opts: "--log-driver=awslogs --log-opt awslogs-group=my-logs --log-opt awslogs-region=us-east-1"
+        prune: true
+        restart-only: false
+        debug: true

@@ -36,5 +36,6 @@ jobs:
             docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
             docker stop todopython-api || true
             docker rm todopython-api || true
+            docker image rm ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest
             docker run -d --name todopython-api -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/todopython-api:latest

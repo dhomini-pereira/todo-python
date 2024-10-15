@@ -6,5 +6,5 @@ COPY . .
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_ENV=development
-EXPOSE 8000
+EXPOSE 5000
 CMD ["flask", "run"]

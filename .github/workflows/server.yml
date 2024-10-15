@@ -40,4 +40,4 @@ jobs:
             docker rm todo-python-front || true
             docker image rm ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest
-            docker run -d --name todo-python-front -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest
+            docker run -d --name todo-python-front -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/todo-python-front:latest

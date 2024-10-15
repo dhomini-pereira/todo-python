@@ -1,3 +1,5 @@
+name: Deploy
+
 on:
   push:
     branches:
@@ -6,43 +8,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+      - name: Checkout código
+        uses: actions/checkout@v2
 
-    - name: Create SSH directory
-      run: mkdir -p ~/.ssh
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-    - name: Add SSH known hosts
-      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-    - name: Deploy to EC2
-      run: |
-        echo "Attempting to connect to EC2..."
-        echo "${{ secrets.SSH_KEY }}" > private_key.pem
-        chmod 600 private_key.pem
-
-        ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.SSH_HOST }} << 'EOF'
-          mkdir -p /home/ec2-user/app
-          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./server ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/app
-
-          if [ ! -d "/home/ec2-user/app/server" ]; then
-            echo "Erro: a pasta server não foi copiada com sucesso."
-            exit 1
-          fi
-
-          cd /home/ec2-user/app/server || { echo "Erro ao entrar no diretório"; exit 1; }
-
-          if [ ! -f "Dockerfile" ]; then
-            echo "Erro: Dockerfile não encontrado."
-            exit 1
-          fi
-
-          docker build -t todo-python-app .
-
-          docker stop todo-python-service || true
-          docker rm todo-python-service || true
-
-          docker run -d --name todo-python-service -p 80:8000 todo-python-app
-        EOF
+      - name: Conectar e executar comando remoto
+        run: |
+          ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_HOST }}" "comando_a_ser_executado"

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import { useNavbar } from "@/context/NavbarContext";
 import api from "@/services/api.service";
+import { API_URL } from "@/app/globals";
 
 type IUser = {
   createdAt: string;
@@ -19,8 +20,7 @@ export default function Navbar() {
   useEffect(() => {
     (async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const response = await api.get(`${apiUrl}/user`);
+        const response = await api.get(`${API_URL}/user`);
         const data: IUser = response.data;
         setUser(data);
       } catch (e: any) {

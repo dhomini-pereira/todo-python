@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { useNavbar } from "@/context/NavbarContext";
 import api from "@/services/api.service";
 import React, { useEffect, useState } from "react";
+import { API_URL } from "../globals";
 
 type IWorkarea = {
   createdAt: string;
@@ -23,9 +24,8 @@ export default function page() {
   useEffect(() => {
     (async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         const { data }: { data: IResponseWorkarea } = await api.get(
-          `${apiUrl}/workarea`
+          `${API_URL}/workarea`
         );
         setWorkareas(
           data.workareas.sort((a, b) => {

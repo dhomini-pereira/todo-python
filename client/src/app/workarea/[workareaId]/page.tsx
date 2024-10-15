@@ -1,10 +1,9 @@
 "use client";
+import { API_URL } from "@/app/globals";
 import Navbar from "@/components/navbar/Navbar";
 import api from "@/services/api.service";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 enum TaskStatus {
   PENDING = "PENDING",

@@ -3,8 +3,7 @@ import { useForm } from "react-hook-form";
 import background from "../../assets/backgroundSession.jpg";
 import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "../globals";
 
 type IUser = {
   username: string;

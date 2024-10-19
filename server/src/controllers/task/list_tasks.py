@@ -54,7 +54,12 @@ def list_tasks(filters, userId, id):
                     'title': task.title,
                     'description': task.description,
                     'status': task.status,
-                    'userId': task.user.id if task.user else None,
+                    'userId': task.user.id if {
+                        'id': task.user.id,
+                        'name': task.user.name,
+                        'email': task.user.email,
+                        'image_url': task.user.image_url
+                    } else None,
                     'timeEstimate': task.time_estimate.isoformat() if task.time_estimate else None,
                     'createdAt': task.created_at.isoformat(),
                     'updatedAt': task.updated_at.isoformat()

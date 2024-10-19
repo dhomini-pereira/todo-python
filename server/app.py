@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from controllers.workareas import list_users_in_workarea
 from src.controllers.user.create_user import create_user
 from src.controllers.user.login_user import login_user
 from src.controllers.task.list_tasks import list_tasks
@@ -131,6 +132,11 @@ def new_workarea():
     data = request.json
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return create_workarea(userId, data)
+
+@app.get("/workarea/<workarea_id>/member")
+def list_member_in_workarea(workarea_id):
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return list_users_in_workarea(userId, workarea_id)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=False)

@@ -54,7 +54,7 @@ export default function WorkArea() {
             <p className="text-slate-500">
               Manage All your activities in a single screen.
             </p>
-            <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:grid">
+            <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex">
               {workareas?.map((workarea, index) => (
                 <a
                   href={`/workarea/${workarea.id}`}

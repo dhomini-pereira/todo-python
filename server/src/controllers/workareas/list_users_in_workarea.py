@@ -9,12 +9,11 @@ def list_users_in_workarea(user_id, workarea_id):
         users = (
             User
             .select()
-            .join(MemberWorkArea, WorkArea)
+            .join(MemberWorkArea, JOIN.INNER, on=(MemberWorkArea.user == User.id))
+            .join(WorkArea, JOIN.INNER, on=(MemberWorkArea.work_area == WorkArea.id))
             .where(
                 WorkArea.id == workarea_id,
-                MemberWorkArea.work_area == WorkArea.id,
-                User.id == user_id,
-                ( MemberWorkArea.user == User.id | WorkArea.owner == User.id )
+                (WorkArea.owner == User.id) | (MemberWorkArea.user == User.id)
             )
         )
 

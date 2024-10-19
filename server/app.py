@@ -139,5 +139,5 @@ def list_member_in_workarea(workarea_id):
     return list_users_in_workarea(userId, workarea_id)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=False)
+    app.run(host="0.0.0.0", port=8000, debug=True)
     # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

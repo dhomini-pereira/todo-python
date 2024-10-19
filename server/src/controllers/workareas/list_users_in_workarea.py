@@ -1,25 +1,27 @@
-from src.models.member_work_area import MemberWorkArea
-from peewee import JOIN
-from src.models.work_area import WorkArea
-from src.models.user import User
 from flask import jsonify
+from src.models.user import User
 
 def list_users_in_workarea(user_id, workarea_id):
     try:
-        users = (
-            User
-            .select()
-            .join(MemberWorkArea, JOIN.INNER, on=(MemberWorkArea.user == User.id))
-            .join(WorkArea, JOIN.INNER, on=(MemberWorkArea.work_area == WorkArea.id))
-            .where(
-                WorkArea.id == workarea_id,
-                (WorkArea.owner == User.id) | (MemberWorkArea.user == User.id)
-            )
-        )
+        query = """
+            SELECT
+	            u.*
+            FROM
+	            users u,
+                member_work_areas mwa,
+                work_area wa
+            WHERE
+	            wa.id = %s
+            AND
+	            mwa.work_area_id = wa.id
+            AND
+	            (mwa.user_id = u.id OR wa.owner_id = u.id)
+        """
+        users = User.raw(query, workarea_id)
 
-        userExists = users.exists()
+        user_list = [user for user in users]
 
-        if not userExists:
+        if not user_list:
             return jsonify({'error': 'User not found in workarea'}), 404
         
         return jsonify({'users': [
@@ -28,7 +30,7 @@ def list_users_in_workarea(user_id, workarea_id):
                 'username': user.username,
                 'email': user.email,
                 'image_url': user.image_url,
-            } for user in users
+            } for user in user_list
         ]}), 200
     
     except Exception as e:

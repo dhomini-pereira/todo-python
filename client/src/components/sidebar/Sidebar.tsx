@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ISidebarProps {
   MenuIsActive: boolean;
@@ -17,6 +17,12 @@ export default function Sidebar({
   handle,
 }: ISidebarProps) {
   const pathName = usePathname();
+  const router = useRouter();
+
+  const signOut = () => {
+    sessionStorage.clear();
+    router.push("/signin");
+  };
 
   const menuItems: IMenuItem[] = [
     {
@@ -145,6 +151,7 @@ export default function Sidebar({
               strokeWidth="1.5"
               stroke="currentColor"
               className="w-10 h-10 p-2 hover:bg-red-600 duration-500 rounded-full cursor-pointer"
+              onClick={signOut}
             >
               <path
                 strokeLinecap="round"

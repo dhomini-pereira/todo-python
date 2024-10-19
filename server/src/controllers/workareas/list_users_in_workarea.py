@@ -9,8 +9,18 @@ def list_users_in_workarea(userId, workarea_id):
         users = (
             User
             .select()
-            .join(MemberWorkArea)
-            .where(MemberWorkArea.work_area == workarea_id)
+            .join(MemberWorkArea, JOIN.LEFT_OUTER)
+            .join(WorkArea, JOIN.LEFT_OUTER)
+            .where(
+                (
+                    WorkArea.owner == userId,
+                    WorkArea.id == workarea_id
+                )|
+                (
+                    MemberWorkArea.user == userId,
+                    WorkArea.id == workarea_id
+                )
+            )
         )
         
         return jsonify({

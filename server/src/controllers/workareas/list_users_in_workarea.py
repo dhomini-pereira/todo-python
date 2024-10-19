@@ -6,20 +6,6 @@ from flask import jsonify
 
 def list_users_in_workarea(userId, workarea_id):
     try:
-        userExistsInWorkarea = (
-            WorkArea
-            .select()
-            .join(MemberWorkArea, JOIN.INNER, on=(WorkArea.id == MemberWorkArea.work_area))
-            .where(
-                (MemberWorkArea.user == userId) | (WorkArea.owner == userId),
-                WorkArea.id == workarea_id
-            )
-            .exists()
-        )
-        
-        if not userExistsInWorkarea:
-            return jsonify({'error': 'User not exists in workarea'}), 404
-
         users = (
             User
             .select()

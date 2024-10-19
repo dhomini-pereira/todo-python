@@ -14,6 +14,7 @@ from src.controllers.workareas.delete_workarea import delete_workarea
 from src.controllers.workareas.user_in_workarea import user_in_workarea
 from src.controllers.workareas.remove_user_workarea import remove_user_workarea
 from src.controllers.workareas.create_workarea import create_workarea
+from src.controllers.workareas.find_workarea import find_workarea
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
@@ -110,6 +111,11 @@ def remove_workarea(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return delete_workarea(workarea_id, userId)
 
+@app.get("/workarea/<workarea_id>")
+def get_workarea(workarea_id):
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return find_workarea(workarea_id, userId)
+
 @app.post("/workarea/<workarea_id>/member/<username>")
 def insert_user_in_workarea(workarea_id, username):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
@@ -126,6 +132,6 @@ def new_workarea():
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     return create_workarea(userId, data)
 
-# if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=8000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=False)
     # pg_db.create_tables([User, WorkArea, MemberWorkArea, Task])

@@ -129,7 +129,6 @@ export default function WorkAreaInfo() {
     setTasks(updatedTasks);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const url = `${API_URL}/workarea/${workareaId}/task/${movedTask.id}`;
 
       await api.put(url, {

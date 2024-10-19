@@ -59,7 +59,9 @@ export default function WorkAreaInfo() {
     (async () => {
       try {
         const url = `${API_URL}/workarea/${workareaId}/task?page=${page}`;
-        const [pendingTasks, progressingTasks, doneTasks, workarea] =
+        const [pendingTasks, progressingTasks, doneTasks
+          // , workarea
+        ] =
           await Promise.all([
             api.get(url + "&status=PENDING").catch((err) => {
               if (err.response?.status === 404) {
@@ -79,10 +81,12 @@ export default function WorkAreaInfo() {
               }
               throw err;
             }),
-            api.get(`${API_URL}/workarea/${workareaId}`),
+            // api.get(`${API_URL}/workarea/${workareaId}`),
           ]);
 
-        setTitle(workarea.data.title);
+        // setTitle(workarea.data.title);
+        setTitle("Titulo Aqui");
+
 
         const httpResponse: IPromiseHttpResponse = {
           pending: pendingTasks.data.tasks,

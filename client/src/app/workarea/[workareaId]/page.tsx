@@ -58,9 +58,7 @@ export default function WorkAreaInfo() {
     (async () => {
       try {
         const url = `${API_URL}/workarea/${workareaId}/task?page=${page}`;
-        const [pendingTasks, progressingTasks, doneTasks
-          // , workarea
-        ] =
+        const [pendingTasks, progressingTasks, doneTasks, workarea] =
           await Promise.all([
             api.get(url + "&status=PENDING").catch((err) => {
               if (err.response?.status === 404) {
@@ -80,12 +78,11 @@ export default function WorkAreaInfo() {
               }
               throw err;
             }),
-            // api.get(`${API_URL}/workarea/${workareaId}`),
+            api.get(`${API_URL}/workarea/${workareaId}`),
           ]);
 
-        // setTitle(workarea.data.title);
-        setTitle("Titulo Aqui");
-
+        setTitle(workarea.data.name);
+        // setTitle("Titulo Aqui");
 
         const httpResponse: IPromiseHttpResponse = {
           pending: pendingTasks.data.tasks,
@@ -160,25 +157,37 @@ export default function WorkAreaInfo() {
       >
         <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center">
           <div className="h-[90%] block w-[90%]">
-            <h1 className="text-5xl text-slate-200">{title}</h1>
+            <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className="bg-red-500 w-full h-[90%] mt-2 flex items-end gap-[10%]">
+              <div className=" w-full h-[90%] mt-2 flex items-end gap-[2%]">
                 {["pending", "progressing", "done"].map((status) => (
                   <Droppable droppableId={status} key={status}>
                     {(provided) => (
                       <div
-                        className={`${
-                          status === "pending"
-                            ? "bg-green-500"
-                            : status === "progressing"
-                            ? "bg-yellow-500"
-                            : "bg-sky-500"
-                        } w-[30%] h-full mt-2 flex flex-col gap-3`}
+                        className={`bg-slate-800 w-[40%] h-full mt-2 flex flex-col gap-3 rounded-lg border-x-8 border-slate-700`}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >
-                        <div className="bg-slate-600 pt-3 pb-3 pl-3">
-                          <h1 className="text-slate-200 text-xl">
+                        <div className="bg-slate-800 pt-3 pb-3 pl-3">
+                          <h1 className="text-slate-200 text-xl flex items-center gap-2">
+                            <span
+                              className={`${
+                                status === "pending"
+                                  ? "text-green-500"
+                                  : status === "progressing"
+                                  ? "text-yellow-500"
+                                  : "text-sky-500"
+                              }`}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className="h-2"
+                              >
+                                <path d="M5.25 3A2.25 2.25 0 0 0 3 5.25v9.5A2.25 2.25 0 0 0 5.25 17h9.5A2.25 2.25 0 0 0 17 14.75v-9.5A2.25 2.25 0 0 0 14.75 3h-9.5Z" />
+                              </svg>
+                            </span>
                             {status.charAt(0).toUpperCase() + status.slice(1)}
                           </h1>
                         </div>
@@ -192,12 +201,20 @@ export default function WorkAreaInfo() {
                               >
                                 {(provided) => (
                                   <div
-                                    className="bg-sky-500 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto"
+                                    className={`border-l-8 ${
+                                      status === "pending"
+                                        ? "border-green-500"
+                                        : status === "progressing"
+                                        ? "border-yellow-500"
+                                        : "border-sky-500"
+                                    } bg-slate-600 opacity-90 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto`}
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
-                                    <h1>{task.title}</h1>
+                                    <h1 className="text-slate-100 text-[18px] p-4 leading-5">
+                                      {task.title}
+                                    </h1>
                                   </div>
                                 )}
                               </Draggable>

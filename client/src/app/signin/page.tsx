@@ -5,9 +5,6 @@ import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
 
-const apiu = process.env.NEXT_PUBLIC_API_URL;
-console.log(apiu);
-
 type IUser = {
   email: string;
   password: string;

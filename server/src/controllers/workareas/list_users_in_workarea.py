@@ -9,24 +9,28 @@ def list_users_in_workarea(user_id, workarea_id):
         users = (
             User
             .select()
-            .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.user == User.id))
-            .join(WorkArea, JOIN.LEFT_OUTER, on=(WorkArea.id == MemberWorkArea.work_area))
+            .join(MemberWorkArea, WorkArea)
             .where(
-                ((WorkArea.owner == user_id) & (WorkArea.id == workarea_id)) |
-                ((MemberWorkArea.user == user_id) & (WorkArea.id == workarea_id))
+                WorkArea.id == workarea_id,
+                MemberWorkArea.work_area == WorkArea.id,
+                User.id == user_id,
+                ( MemberWorkArea.user == User.id | WorkArea.owner == User.id )
             )
         )
 
-        user_list = [
+        userExists = users.exists()
+
+        if not userExists:
+            return jsonify({'error': 'User not found in workarea'}), 404
+        
+        return jsonify({'users': [
             {
                 'id': user.id,
                 'username': user.username,
                 'email': user.email,
                 'image_url': user.image_url,
             } for user in users
-        ]
-        
-        return jsonify({'users': user_list}), 200
+        ]}), 200
     
     except Exception as e:
         return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500

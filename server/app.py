@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from controllers.workareas import list_users_in_workarea
 from src.controllers.user.create_user import create_user
 from src.controllers.user.login_user import login_user
 from src.controllers.task.list_tasks import list_tasks
@@ -16,6 +15,7 @@ from src.controllers.workareas.user_in_workarea import user_in_workarea
 from src.controllers.workareas.remove_user_workarea import remove_user_workarea
 from src.controllers.workareas.create_workarea import create_workarea
 from src.controllers.workareas.find_workarea import find_workarea
+from src.controllers.workareas.list_users_in_workarea import list_users_in_workarea
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 

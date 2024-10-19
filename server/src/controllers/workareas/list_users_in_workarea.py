@@ -1,7 +1,7 @@
-from models.member_work_area import MemberWorkArea
+from src.models.member_work_area import MemberWorkArea
 from peewee import JOIN
-from models.work_area import WorkArea
-from models.user import User
+from src.models.work_area import WorkArea
+from src.models.user import User
 from flask import jsonify
 
 def list_users_in_workarea(userId, workarea_id):

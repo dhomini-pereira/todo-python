@@ -13,6 +13,9 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
+import { Bounce, Flip, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./WorkareaId.css"
 
 enum TaskStatus {
   PENDING = "PENDING",
@@ -45,7 +48,7 @@ type ITaskHttp = {
 };
 
 export default function WorkAreaInfo() {
-  const { handleSubmit, register } = useForm<ITaskHttp>();
+  const { handleSubmit, register, reset } = useForm<ITaskHttp>();
   const { workareaId } = useParams();
   const query = useSearchParams();
   const page = query.get("page") || 1;
@@ -67,18 +70,24 @@ export default function WorkAreaInfo() {
   async function handleTask(task: ITaskHttp) {
     try {
       const url = `${API_URL}/workarea/${workareaId}/task`;
-      const createdTask = await api.post(url, task);
-      setTasks((prevState) => {
-        return {
-          pending: [createdTask.data, ...prevState.pending],
-          progressing: prevState.progressing,
-          done: prevState.done,
-        };
+      const request = api.post(url, task);
+
+      const createdTask = await toast.promise(request, {
+        pending: "Creating task...",
+        success: "Task was created successfully 👌",
+        error: "Error creating task 🤯",
       });
-      alert("Task criada com sucesso!");
-      setModalShow(false)
+
+      setTasks((prevState) => ({
+        pending: [createdTask.data, ...prevState.pending],
+        progressing: prevState.progressing,
+        done: prevState.done,
+      }));
+
+      setModalShow(false);
+      reset();
     } catch (err: any) {
-      alert(err.response.data.error);
+      toast.error(err.response.data.error || "Erro desconhecido");
     }
   }
 
@@ -183,8 +192,25 @@ export default function WorkAreaInfo() {
   return (
     <div className="h-full">
       <Navbar />
+      <ToastContainer
+        position="top-right"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Flip}
+      />
       <TaskCreate
-        handleSubmit={{ handle: handleSubmit(handleTask), modalShow, setModalShow }}
+        handleSubmit={{
+          handle: handleSubmit(handleTask),
+          modalShow,
+          setModalShow,
+        }}
         register={register}
         users={users}
         trigger={
@@ -225,9 +251,9 @@ export default function WorkAreaInfo() {
                             <span
                               className={`${
                                 status === "pending"
-                                  ? "text-red-500"
-                                  : status === "progressing"
                                   ? "text-yellow-500"
+                                  : status === "progressing"
+                                  ? "text-orange-500"
                                   : "text-green-500"
                               }`}
                             >
@@ -253,17 +279,30 @@ export default function WorkAreaInfo() {
                               >
                                 {(provided) => (
                                   <div
-                                    className={`border-l-8 ${
+                                    className={`cardStyle border-l-8 ${
                                       status === "pending"
-                                        ? "border-red-500"
-                                        : status === "progressing"
                                         ? "border-yellow-500"
+                                        : status === "progressing"
+                                        ? "border-orange-500"
                                         : "border-green-500"
-                                    } bg-slate-600 opacity-90 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto min-h-[80px]`}
+                                    } bg-slate-600 opacity-90 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto min-h-[80px] relative`}
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      className={`size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all`}
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
+                                        clip-rule="evenodd"
+                                      />
+                                    </svg>
+
                                     <h1 className="text-slate-100 text-[18px] p-4 leading-5">
                                       {task.title}
                                     </h1>

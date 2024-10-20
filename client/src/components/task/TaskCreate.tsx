@@ -8,7 +8,7 @@ export default function TaskCreate({ trigger, users, handleSubmit, register }: a
   return (
     <div className="bg-green-500 absolute">
       <div
-        className="text-slate-200 fixed bottom-3 right-1"
+        className="text-slate-200 fixed bottom-5 right-3"
         onClick={() => handleSubmit.setModalShow(true)}
       >
         {trigger}
@@ -55,8 +55,9 @@ export default function TaskCreate({ trigger, users, handleSubmit, register }: a
                   id="userId"
                   className="ease-in-out duration-250 focus:border-slate-400 outline-none bg-slate-900 p-1 border-[1px] border-slate-600 text-white rounded-sm"
                   {...register("userId")}
+                  defaultValue="select"
                 >
-                  <option value="" defaultChecked disabled></option>
+                  <option value="select" disabled></option>
                   {users.map((u: any) => (
                     <option value={u.id}>{u.username}</option>
                   ))}

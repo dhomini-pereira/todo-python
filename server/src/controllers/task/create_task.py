@@ -42,7 +42,12 @@ def create_task(userId, data, workarea_id):
             'description': task.description,
             'status': task.status,
             'timeEstimate': task.time_estimate.isoformat() if task.time_estimate else None,
-            'userId': task.user.id if task.user else None,
+            'user': {
+                'id': task.user.id,
+                'username': task.user.username,
+                'email': task.user.email,
+                'image_url': task.user.image_url
+            } if task.user else None,
             'createdAt': task.created_at.isoformat(),
             'updatedAt': task.updated_at.isoformat()
         }), 201

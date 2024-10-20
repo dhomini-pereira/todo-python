@@ -45,7 +45,7 @@ def list_tasks(filters, userId, id):
         task_total = query.count()
 
         if not tasks:
-            return jsonify({'tasks': [], 'total': 0}), 200
+            return jsonify({ 'tasks': [], 'total': 0 }), 200
 
         tasks_obj = {
             'tasks': [
@@ -56,7 +56,7 @@ def list_tasks(filters, userId, id):
                     'status': task.status,
                     'user': {
                         'id': task.user.id,
-                        'name': task.user.name,
+                        'username': task.user.username,
                         'email': task.user.email,
                         'image_url': task.user.image_url
                     } if task.user else None,
@@ -71,7 +71,7 @@ def list_tasks(filters, userId, id):
         return jsonify(tasks_obj), 200
 
     except DoesNotExist:
-        return jsonify({'tasks': [], 'total': 0}), 404
+        return jsonify({ 'tasks': [], 'total': 0 }), 404
     except IntegrityError:
         return jsonify({'error': 'Failed to retrieve tasks due to database error'}), 500
     except Exception as e:

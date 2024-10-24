@@ -4,19 +4,22 @@ import React, { useState } from "react";
 type IProps = {
   children: React.ReactNode;
   trigger: React.ReactNode;
-  eventEmitter: EventEmitter;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Modal({ children, trigger, eventEmitter }: IProps) {
-  const [activeModal, setActiveModal] = useState<boolean>(false);
-  eventEmitter.on("modal", () => setActiveModal(!activeModal));
-
+export default function Modal({
+  children,
+  trigger,
+  isOpen,
+  setIsOpen,
+}: IProps) {
   return (
     <>
       {React.cloneElement(trigger as React.ReactElement, {
-        onClick: () => eventEmitter.emit("modal"),
+        onClick: () => setIsOpen(!isOpen),
       })}
-      {activeModal && (
+      {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           {children}
         </div>

@@ -1,5 +1,4 @@
 import Modal from "@/components/modal/Modal";
-import EventEmitter from "events";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "@/app/globals";
 import api from "@/services/api.service";
@@ -43,9 +42,9 @@ type IProps = {
 };
 
 export default function CreateTask({ workareaId, setTasks }: IProps) {
-  const eventEmitter = new EventEmitter();
   const { handleSubmit, register, reset } = useForm<ITaskHttp>();
   const [users, setUsers] = useState<any>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -53,12 +52,9 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
         const usersList = await api.get(
           `${API_URL}/workarea/${workareaId}/member`
         );
-
-        console.log(usersList.data.users);
-
         setUsers(usersList.data.users);
       } catch (err: any) {
-        if (err.response.data) {
+        if (err.response?.data) {
           toast.error(err.response.data.error);
         }
       }
@@ -82,10 +78,10 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
         done: prevState.done,
       }));
 
-      eventEmitter.emit("modal");
+      setIsModalOpen(false);
       reset();
     } catch (err: any) {
-      toast.error(err.response.data.error || "Erro desconhecido");
+      toast.error(err.response?.data?.error || "Erro desconhecido");
     }
   }
 
@@ -105,7 +101,8 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
         transition={Flip}
       />
       <Modal
-        eventEmitter={eventEmitter}
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
         trigger={
           <div className="text-slate-200 fixed bottom-5 right-3 z-50">
             <svg
@@ -115,9 +112,9 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               className="h-[64px] hover:text-slate-300 cursor-pointer text-slate-200"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
           </div>
@@ -136,12 +133,10 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               <input
                 type="text"
                 className="ease-in-out duration-250 focus:border-slate-400 outline-none h-full rounded-sm p-1 text-white bg-slate-900 placeholder:text-slate-600 indent-2 border-[1px] border-slate-600"
-                placeholder=""
                 id="title"
                 {...register("title")}
               />
             </div>
-
             <div className="flex flex-col">
               <label htmlFor="timeEstimate" className="indent-2 text-slate-300">
                 Expiration
@@ -153,7 +148,6 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
                 {...register("timeEstimate")}
               />
             </div>
-
             <div className="flex flex-col col-span-2">
               <label htmlFor="userId" className="indent-2 text-slate-300">
                 Assigned
@@ -166,13 +160,14 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               >
                 <option value="select" disabled></option>
                 {users?.map((u: any) => (
-                  <option value={u.id}>{u.username}</option>
+                  <option key={u.id} value={u.id}>
+                    {u.username}
+                  </option>
                 ))}
               </select>
             </div>
-
             <div className="col-span-2 flex flex-col">
-              <label htmlFor="description" className="indent-2  text-slate-300">
+              <label htmlFor="description" className="indent-2 text-slate-300">
                 Description
               </label>
               <textarea
@@ -182,11 +177,11 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               ></textarea>
             </div>
           </div>
-
           <div className="col-span-2 flex justify-end gap-4 mt-5">
             <button
+              type="button"
               className="pl-6 pr-6 pt-2 pb-2 rounded-md text-red-600 border-[1px] border-red-600 hover:bg-red-700 hover:text-white ease-in-out duration-200"
-              onClick={() => eventEmitter.emit("modal")}
+              onClick={() => setIsModalOpen(false)}
             >
               Cancel
             </button>
@@ -198,8 +193,9 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
             </button>
           </div>
           <button
+            type="button"
             className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700"
-            onClick={() => eventEmitter.emit("modal")}
+            onClick={() => setIsModalOpen(false)}
           >
             X
           </button>

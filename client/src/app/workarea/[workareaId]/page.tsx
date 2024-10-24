@@ -13,6 +13,7 @@ import {
 } from "react-beautiful-dnd";
 import "./WorkareaId.css";
 import CreateTask from "./components/create-task/CreateTask";
+import DeleteTask from "./components/delete-task/DeleteTask";
 
 enum TaskStatus {
   PENDING = "PENDING",
@@ -49,6 +50,8 @@ export default function WorkAreaInfo() {
   });
   const { isActive } = useNavbar();
   const [hydrated, setHydrated] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -60,32 +63,28 @@ export default function WorkAreaInfo() {
     (async () => {
       try {
         const url = `${API_URL}/workarea/${workareaId}/task?page=${page}`;
-        const [
-          pendingTasks,
-          progressingTasks,
-          doneTasks,
-          workarea
-        ] = await Promise.all([
-          api.get(url + "&status=PENDING").catch((err) => {
-            if (err.response?.status === 404) {
-              return { data: { tasks: [] } };
-            }
-            throw err;
-          }),
-          api.get(url + "&status=PROGRESSING").catch((err) => {
-            if (err.response?.status === 404) {
-              return { data: { tasks: [] } };
-            }
-            throw err;
-          }),
-          api.get(url + "&status=DONE").catch((err) => {
-            if (err.response?.status === 404) {
-              return { data: { tasks: [] } };
-            }
-            throw err;
-          }),
-          api.get(`${API_URL}/workarea/${workareaId}`),
-        ]);
+        const [pendingTasks, progressingTasks, doneTasks, workarea] =
+          await Promise.all([
+            api.get(url + "&status=PENDING").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
+            api.get(url + "&status=PROGRESSING").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
+            api.get(url + "&status=DONE").catch((err) => {
+              if (err.response?.status === 404) {
+                return { data: { tasks: [] } };
+              }
+              throw err;
+            }),
+            api.get(`${API_URL}/workarea/${workareaId}`),
+          ]);
         setTitle(workarea.data.name);
 
         const httpResponse: IPromiseHttpResponse = {
@@ -145,6 +144,16 @@ export default function WorkAreaInfo() {
     }
   };
 
+  const openDeleteModal = (task: ITask) => {
+    setSelectedTask(task);
+    setShowDeleteModal(true);
+  };
+
+  const closeModal = () => {
+    setShowDeleteModal(false);
+    setSelectedTask(null);
+  };
+
   if (!hydrated) {
     return null;
   }
@@ -152,7 +161,15 @@ export default function WorkAreaInfo() {
   return (
     <div className="h-full">
       <Navbar />
-      <CreateTask setTasks={setTasks} workareaId={workareaId}/>
+      <CreateTask setTasks={setTasks} workareaId={workareaId} />
+      {showDeleteModal && (
+        <DeleteTask
+          setTasks={setTasks}
+          workareaId={workareaId}
+          taskId={selectedTask?.id}
+          closeModal={closeModal}
+        />
+      )}
       <div
         className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
@@ -162,7 +179,7 @@ export default function WorkAreaInfo() {
           <div className="h-[90%] block w-[90%]">
             <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className=" w-full h-[90%] mt-2 flex items-end gap-[2%]">
+              <div className="w-full h-[90%] mt-2 flex items-end gap-[2%]">
                 {["pending", "progressing", "done"].map((status) => (
                   <Droppable droppableId={status} key={status}>
                     {(provided) => (
@@ -215,11 +232,15 @@ export default function WorkAreaInfo() {
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
+                                    <h1 className="text-slate-200">
+                                      {task.title}
+                                    </h1>
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 20 20"
                                       fill="currentColor"
                                       className={`size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all`}
+                                      onClick={() => openDeleteModal(task)}
                                     >
                                       <path
                                         fill-rule="evenodd"
@@ -227,10 +248,6 @@ export default function WorkAreaInfo() {
                                         clip-rule="evenodd"
                                       />
                                     </svg>
-
-                                    <h1 className="text-slate-100 text-[18px] p-4 leading-5">
-                                      {task.title}
-                                    </h1>
                                   </div>
                                 )}
                               </Draggable>

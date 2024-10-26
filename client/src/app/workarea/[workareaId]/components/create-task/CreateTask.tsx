@@ -5,6 +5,8 @@ import api from "@/services/api.service";
 import { useForm } from "react-hook-form";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Icon from "@/components/icon/Icon";
+import { useLoading } from "@/context/LoadingContext";
 
 enum TaskStatus {
   PENDING = "PENDING",
@@ -45,10 +47,12 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
   const { handleSubmit, register, reset } = useForm<ITaskHttp>();
   const [users, setUsers] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const loading = useLoading();
 
   useEffect(() => {
     (async () => {
       try {
+        loading.toggle();
         const usersList = await api.get(
           `${API_URL}/workarea/${workareaId}/member`
         );
@@ -57,12 +61,15 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
         if (err.response?.data) {
           toast.error(err.response.data.error);
         }
+      } finally {
+        loading.toggle();
       }
     })();
   }, []);
 
   async function handleTask(task: ITaskHttp) {
     try {
+      loading.toggle();
       const url = `${API_URL}/workarea/${workareaId}/task`;
       const request = api.post(url, task);
 
@@ -82,6 +89,8 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
       reset();
     } catch (err: any) {
       toast.error(err.response?.data?.error || "Erro desconhecido");
+    } finally {
+      loading.toggle();
     }
   }
 
@@ -105,18 +114,10 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
         setIsOpen={setIsModalOpen}
         trigger={
           <div className="text-slate-200 fixed bottom-5 right-3 z-50">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+            <Icon
+              iconName="plus"
               className="h-[64px] hover:text-slate-300 cursor-pointer text-slate-200"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z"
-                clipRule="evenodd"
-              />
-            </svg>
+            />
           </div>
         }
       >

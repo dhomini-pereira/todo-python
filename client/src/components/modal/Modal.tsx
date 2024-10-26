@@ -1,5 +1,4 @@
-import EventEmitter from "events";
-import React, { useState } from "react";
+import React from "react";
 
 type IProps = {
   children: React.ReactNode;

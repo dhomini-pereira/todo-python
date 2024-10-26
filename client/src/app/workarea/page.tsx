@@ -4,6 +4,7 @@ import { useNavbar } from "@/context/NavbarContext";
 import api from "@/services/api.service";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../globals";
+import { useLoading } from "@/context/LoadingContext";
 
 type IWorkarea = {
   createdAt: string;
@@ -20,10 +21,12 @@ type IResponseWorkarea = {
 export default function WorkArea() {
   const { isActive } = useNavbar();
   const [workareas, setWorkareas] = useState<IWorkarea[]>([]);
+  const loading = useLoading();
 
   useEffect(() => {
     (async () => {
       try {
+        loading.toggle();
         const { data }: { data: IResponseWorkarea } = await api.get(
           `${API_URL}/workarea`
         );
@@ -36,6 +39,8 @@ export default function WorkArea() {
         );
       } catch (e: any) {
         alert(e.response.data.error);
+      } finally {
+        loading.toggle();
       }
     })();
   }, []);
@@ -59,6 +64,7 @@ export default function WorkArea() {
                 <a
                   href={`/workarea/${workarea.id}`}
                   className="w-[18%] max-md:w-full md:max-w-[300px]"
+                  key={workarea.id}
                 >
                   <div
                     key={workarea.id}

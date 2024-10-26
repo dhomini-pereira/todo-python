@@ -4,6 +4,7 @@ import background from "../../assets/backgroundSession.jpg";
 import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
+import { useLoading } from "@/context/LoadingContext";
 
 type IUser = {
   username: string;
@@ -14,9 +15,11 @@ type IUser = {
 export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
   const router = useRouter();
+  const loading = useLoading();
 
   async function handleSignUp(user: IUser) {
     try {
+      loading.toggle();
       const url = `${API_URL}/signup`;
       await api.post(url, user);
 
@@ -24,6 +27,8 @@ export default function Page() {
     } catch (err: any) {
       alert(err.response.data.error);
       return router.refresh();
+    } finally {
+      loading.toggle();
     }
   }
 

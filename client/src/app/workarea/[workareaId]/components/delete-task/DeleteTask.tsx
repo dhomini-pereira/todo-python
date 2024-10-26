@@ -1,5 +1,6 @@
 import { API_URL } from "@/app/globals";
 import Modal from "@/components/modal/Modal";
+import { useLoading } from "@/context/LoadingContext";
 import api from "@/services/api.service";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -42,24 +43,31 @@ export default function DeleteTask({
   closeModal,
 }: IProps) {
   const { handleSubmit } = useForm();
+  const loading = useLoading();
 
   const handleDeleteTask = async () => {
-    const url = `${API_URL}/workarea/${workareaId}/task/${taskId}`;
+    try {
+      loading.toggle();
+      const url = `${API_URL}/workarea/${workareaId}/task/${taskId}`;
 
-    await toast.promise(api.delete(url), {
-      error: "Erro ao deletar a tarefa 🤯",
-      pending: "Deletando a tarefa...",
-      success: "Tarefa deletada com sucesso 👌",
-    });
+      await toast.promise(api.delete(url), {
+        error: "Error deleting task",
+        pending: "Deleting task...",
+        success: "Task deleted successfully 👌",
+      });
 
-    setTasks((prevState) => ({
-      ...prevState,
-      pending: prevState.pending.filter((task) => task.id !== taskId),
-      progressing: prevState.progressing.filter((task) => task.id !== taskId),
-      done: prevState.done.filter((task) => task.id !== taskId),
-    }));
-
-    closeModal();
+      setTasks((prevState) => ({
+        ...prevState,
+        pending: prevState.pending.filter((task) => task.id !== taskId),
+        progressing: prevState.progressing.filter((task) => task.id !== taskId),
+        done: prevState.done.filter((task) => task.id !== taskId),
+      }));
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || "Erro desconhecido");
+    } finally {
+      loading.toggle();
+      closeModal();
+    }
   };
 
   return (

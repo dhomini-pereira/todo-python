@@ -4,7 +4,7 @@ from src.models.user import User
 def list_users_in_workarea(user_id, workarea_id):
     try:
         query = """
-            SELECT
+            SELECT DISTINCT
 	            u.*
             FROM
 	            users u,

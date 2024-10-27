@@ -25,7 +25,12 @@ def user_in_workarea(userId, workareaId, username):
         except MemberWorkArea.DoesNotExist:
             memberWorkArea = MemberWorkArea.create(user=user.id, work_area=workarea.id)
             memberWorkArea.save()
-            return jsonify({'message': 'User added to workarea successfully'}), 200
+            return jsonify({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'image_url': user.image_url
+            }), 200
 
     except WorkArea.DoesNotExist:
         return jsonify({'error': 'Workarea not found'}), 404

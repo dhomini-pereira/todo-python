@@ -9,6 +9,7 @@ def list_workareas(userId):
         workareas = (
             WorkArea
             .select()
+            .distinct()
             .join(MemberWorkArea, JOIN.LEFT_OUTER)
             .where(
                 (MemberWorkArea.user == userId) |

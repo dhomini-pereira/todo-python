@@ -135,8 +135,9 @@ def new_workarea():
 
 @app.get("/workarea/<workarea_id>/member")
 def list_member_in_workarea(workarea_id):
+    args = request.args
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
-    return list_users_in_workarea(userId, workarea_id)
+    return list_users_in_workarea(userId, workarea_id, args)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

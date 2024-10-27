@@ -18,7 +18,7 @@ type IUser = {
 };
 
 type IUserUpdate = {
-  image_url?: File | string;
+  image_url?: FileList | string;
   email?: string;
   username?: string;
   password?: string;
@@ -47,6 +47,8 @@ export default function Profile() {
   }, []);
 
   const handle = async (data: IUserUpdate) => {
+    console.log(data);
+
     try {
       loading.toggle();
       const url = `${API_URL}/user`;
@@ -57,13 +59,13 @@ export default function Profile() {
 
       delete data.confirm_password;
 
-      if (data.image_url instanceof File) {
-        const file = data.image_url;
+      if (data.image_url?.length) {
+        const file = data.image_url as FileList;
         const reader = new FileReader();
 
         const base64 = await new Promise<string | ArrayBuffer | null>(
           (resolve, reject) => {
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file[0]);
             reader.onload = () => resolve(reader.result);
             reader.onerror = (error) => reject(error);
           }
@@ -80,6 +82,10 @@ export default function Profile() {
         updateData.image_url = data.image_url;
       }
 
+      if (Object.keys(updateData).length === 0) {
+        throw new Error("No data to update");
+      }
+
       const request = await toast.promise(api.put(url, updateData), {
         pending: "Updating...",
         success: "Updated!",
@@ -92,7 +98,7 @@ export default function Profile() {
       });
     } catch (e: any) {
       console.log(e);
-      alert(e.response?.data?.error || "An error occurred");
+      alert(e.response?.data?.error || "Error updating user");
     } finally {
       loading.toggle();
     }
@@ -121,23 +127,27 @@ export default function Profile() {
               <input
                 type="text"
                 placeholder="Username"
+                autoComplete="off"
                 defaultValue={user?.username}
                 {...register("username")}
               />
               <input
                 type="email"
                 placeholder="Email"
+                autoComplete="off"
                 defaultValue={user?.email}
                 {...register("email")}
               />
               <input
                 type="password"
                 placeholder="Password"
+                autoComplete="off"
                 {...register("password")}
               />
               <input
                 type="password"
                 placeholder="Confirm Password"
+                autoComplete="off"
                 {...register("confirm_password")}
               />
               <input type="submit" value="Save" />

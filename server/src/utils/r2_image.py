@@ -1,7 +1,6 @@
 import boto3
 import base64
 import os
-import datetime
 
 R2_ENDPOINT_URL = os.getenv("R2_ENDPOINT_URL")
 R2_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")

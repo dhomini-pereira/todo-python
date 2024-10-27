@@ -1,13 +1,24 @@
-from peewee import DoesNotExist
+from peewee import DoesNotExist, JOIN
 from flask import jsonify
+from src.models.member_work_area import MemberWorkArea
 from src.models.work_area import WorkArea
 
 def find_workarea(workarea_id, userId):
     try:
-        workarea = WorkArea.get(id=workarea_id)
+        existsWorkarea = (
+            WorkArea
+            .select()
+            .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.work_area == WorkArea.id))
+            .where(
+                WorkArea.id == workarea_id,
+                (WorkArea.owner == userId) | (MemberWorkArea.user == userId)
+            )
+        ).exists()
         
-        if workarea.owner.id != userId:
-            return jsonify({'error': 'You are not the owner of this workarea'}), 403
+        if not existsWorkarea:
+            return jsonify({'error': 'Workarea not found'}), 404
+        
+        workarea = WorkArea.get(id=workarea_id)
         
         return jsonify({
             'id': workarea.id,

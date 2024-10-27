@@ -1,0 +1,22 @@
+POST http://ec2-15-228-254-16.sa-east-1.compute.amazonaws.com:5000/workarea/2/member/magnoduraes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImRocGUiLCJlbWFpbCI6ImRob21pbmlkYXNpbHZhcGVyZWlyYUBnbWFpbC5jb20iLCJpbWFnZV91cmwiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTJUMDE6MDY6NTAuNDIxNDE2In0sImV4cCI6MTcyOTM2ODQwNn0.dLzY-2_ri3cX_uOYaT_BfamLJfD3dpmtTRI6TgiiITg
+
+####
+
+POST http://ec2-15-228-254-16.sa-east-1.compute.amazonaws.com:5000/signin
+Content-Type: application/json
+
+{
+    "email": "dhominidasilvapereira@gmail.com",
+    "password": "1234"
+}
+
+####
+
+GET http://ec2-15-228-254-16.sa-east-1.compute.amazonaws.com:5000/workarea/2/member
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImRocGUiLCJlbWFpbCI6ImRob21pbmlkYXNpbHZhcGVyZWlyYUBnbWFpbC5jb20iLCJpbWFnZV91cmwiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTJUMDE6MDY6NTAuNDIxNDE2In0sImV4cCI6MTcyOTM3MjA2Nn0.eYtiOfF-0FQ8apEHB-p6iAXqAGtivugt9iGaNOWOhXY
+
+####
+
+GET http://localhost:8000/workarea/2/task
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImRocGUiLCJlbWFpbCI6ImRob21pbmlkYXNpbHZhcGVyZWlyYUBnbWFpbC5jb20iLCJpbWFnZV91cmwiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTJUMDE6MDY6NTAuNDIxNDE2In0sImV4cCI6MTcyOTM4ODYxNH0.G2aogpqu3uUh1hzM9R-eb5u4VuwcHhQFmieMD0JkLXM

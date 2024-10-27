@@ -1,42 +1,49 @@
-from src.models.member_work_area import MemberWorkArea
-from peewee import JOIN
-from src.models.work_area import WorkArea
-from src.models.user import User
 from flask import jsonify
+from src.models.user import User
 
-def list_users_in_workarea(userId, workarea_id):
+def list_users_in_workarea(user_id, workarea_id, args):
     try:
-        userExistsInWorkarea = (
-            WorkArea
-            .select()
-            .join(MemberWorkArea, JOIN.INNER, on=(WorkArea.id == MemberWorkArea.work_area))
-            .where(
-                (MemberWorkArea.user == userId) | (WorkArea.owner == userId),
-                WorkArea.id == workarea_id
-            )
-            .exists()
-        )
-        
-        if not userExistsInWorkarea:
-            return jsonify({'error': 'User not exists in workarea'}), 404
+        if "member" in args:
+            query = """
+                SELECT DISTINCT
+                    u.*
+                FROM
+                    users u
+                JOIN
+                    member_work_areas mwa ON mwa.user_id = u.id
+                WHERE
+                    mwa.work_area_id = %s
+            """
+        else:
+            query = """
+                SELECT DISTINCT
+                    u.*
+                FROM
+                    users u,
+                    member_work_areas mwa,
+                    work_area wa
+                WHERE
+                    wa.id = %s
+                AND
+                    mwa.work_area_id = wa.id
+                AND
+                    (mwa.user_id = u.id OR wa.owner_id = u.id)
+            """
 
-        users = (
-            User
-            .select()
-            .join(MemberWorkArea)
-            .where(MemberWorkArea.work_area == workarea_id)
-        )
+        users = User.raw(query, workarea_id)
+        user_list = [user for user in users]
+
+        if not user_list:
+            return jsonify({'error': 'User not found in workarea'}), 200
         
-        return jsonify({
-            'users': [
-                {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'image_url': user.image_url,
-                } for user in users
-            ]
-        }), 200
+        return jsonify({'users': [
+            {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'image_url': user.image_url,
+            } for user in user_list
+        ]}), 200
     
     except Exception as e:
         return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500

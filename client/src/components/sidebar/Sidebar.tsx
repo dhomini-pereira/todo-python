@@ -63,7 +63,6 @@ export default function Sidebar({
               </a>
             ))}
 
-            {/* LogOut */}
             <Icon
               iconName="exit"
               onClick={() => signOut()}

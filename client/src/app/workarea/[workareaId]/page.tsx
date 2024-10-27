@@ -3,7 +3,7 @@ import { API_URL } from "@/app/globals";
 import Navbar from "@/components/navbar/Navbar";
 import { useNavbar } from "@/context/NavbarContext";
 import api from "@/services/api.service";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -55,6 +55,7 @@ export default function WorkAreaInfo() {
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const loading = useLoading();
+  const router = useRouter();
 
   useEffect(() => {
     setHydrated(true);
@@ -102,13 +103,19 @@ export default function WorkAreaInfo() {
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
-    if (!destination || (source.droppableId === destination.droppableId && source.index === destination.index)) {
+    if (
+      !destination ||
+      (source.droppableId === destination.droppableId &&
+        source.index === destination.index)
+    ) {
       return;
     }
 
     const updatedTasks: IPromiseHttpResponse = { ...tasks };
-    const sourceList = updatedTasks[source.droppableId as keyof IPromiseHttpResponse];
-    const destinationList = updatedTasks[destination.droppableId as keyof IPromiseHttpResponse];
+    const sourceList =
+      updatedTasks[source.droppableId as keyof IPromiseHttpResponse];
+    const destinationList =
+      updatedTasks[destination.droppableId as keyof IPromiseHttpResponse];
 
     const [movedTask] = sourceList.splice(source.index, 1);
     destinationList.splice(destination.index, 0, movedTask);
@@ -122,7 +129,10 @@ export default function WorkAreaInfo() {
     try {
       const url = `${API_URL}/workarea/${workareaId}/task/${movedTask.id}`;
       await api.put(url, {
-        status: TaskStatus[destination.droppableId.toUpperCase() as keyof typeof TaskStatus],
+        status:
+          TaskStatus[
+            destination.droppableId.toUpperCase() as keyof typeof TaskStatus
+          ],
       });
     } catch (err: any) {
       console.log(err);
@@ -155,13 +165,24 @@ export default function WorkAreaInfo() {
           closeModal={closeModal}
         />
       )}
-      <div className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${isActive ? "w-[calc(100vw-64px)]" : "w-full"}`}>
+      <div
+        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
+          isActive ? "w-[calc(100vw-64px)]" : "w-full"
+        }`}
+      >
         <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center">
           <div className="h-[90%] block w-[90%]">
-            <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
+              <Icon
+                iconName="settings"
+                className="w-11 h-11 p-2 text-white cursor-pointer rounded-full hover:bg-zinc-800 ease-in-out duration-500"
+                onClick={() => router.push(`/workarea/${workareaId}/settings`)}
+              />
+            </div>
             <DragDropContext onDragEnd={onDragEnd}>
               <div className="w-full h-[90%] mt-2 flex items-end gap-[2%]">
-                {["pending", "progressing", "done"].map((status) => (
+                {Object.keys(tasks).map((status) => (
                   <Droppable droppableId={status} key={status} mode="virtual">
                     {(provided) => (
                       <div
@@ -171,44 +192,54 @@ export default function WorkAreaInfo() {
                       >
                         <div className="bg-slate-800 pt-3 pb-3 pl-3">
                           <h1 className="text-slate-200 text-xl flex items-center gap-2">
-                            <span className={`${
+                            <span
+                              className={`${
                                 status === "pending"
                                   ? "text-yellow-500"
                                   : status === "progressing"
                                   ? "text-orange-500"
                                   : "text-green-500"
-                              }`}>
+                              }`}
+                            >
                               <Icon iconName="square" className="h-2" />
                             </span>
                             {status.charAt(0).toUpperCase() + status.slice(1)}
                           </h1>
                         </div>
                         <div className="flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
-                          {tasks[status as keyof IPromiseHttpResponse].map((task, index) => (
-                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                              {(provided) => (
-                                <div
-                                  className={`cardStyle border-l-8 ${
-                                    status === "pending"
-                                      ? "border-yellow-500"
-                                      : status === "progressing"
-                                      ? "border-orange-500"
-                                      : "border-green-500"
-                                  } bg-slate-600 opacity-90 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto min-h-[80px] relative`}
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <h1 className="text-slate-200">{task.title}</h1>
-                                  <Icon
-                                    iconName="trash"
-                                    onClick={() => openDeleteModal(task)}
-                                    className="size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all"
-                                  />
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
+                          {tasks[status as keyof IPromiseHttpResponse].map(
+                            (task, index) => (
+                              <Draggable
+                                key={task.id}
+                                draggableId={task.id.toString()}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <div
+                                    className={`cardStyle border-l-8 ${
+                                      status === "pending"
+                                        ? "border-yellow-500"
+                                        : status === "progressing"
+                                        ? "border-orange-500"
+                                        : "border-green-500"
+                                    } bg-slate-600 opacity-90 w-[95%] h-[84px] flex items-center justify-center text-xl rounded-lg ml-auto mr-auto min-h-[80px] relative`}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <h1 className="text-slate-200">
+                                      {task.title}
+                                    </h1>
+                                    <Icon
+                                      iconName="trash"
+                                      onClick={() => openDeleteModal(task)}
+                                      className="size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all"
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            )
+                          )}
                           {provided.placeholder}
                         </div>
                       </div>

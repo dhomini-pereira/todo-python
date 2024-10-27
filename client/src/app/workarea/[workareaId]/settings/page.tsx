@@ -68,7 +68,30 @@ export default function Settings() {
   }, []);
 
   const handleUpdateWorkarea = async (data: IUpdateWorkarea) => {
-    console.log(data);
+    try {
+      loading.toggle();
+      const request = await toast.promise(
+        api.put(`${API_URL}/workarea/${workareaId}`, data),
+        {
+          pending: "Atualizando workarea...",
+          success: "Workarea atualizada com sucesso!",
+          error: "Erro ao atualizar workarea",
+        }
+      );
+
+      setWorkarea((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            name: request.data.name,
+          };
+        }
+      });
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || "Erro ao atualizar workarea");
+    } finally {
+      loading.toggle();
+    }
   };
 
   const handleAddUser = async (data: IAddUser) => {
@@ -217,7 +240,7 @@ export default function Settings() {
                         </td>
                         <td className="py-3 px-6">
                           <Icon
-                            iconName="delete"
+                            iconName="minus"
                             className="h-6 cursor-pointer text-red-500"
                             onClick={() => handleRemoveUser(user.username)}
                           />

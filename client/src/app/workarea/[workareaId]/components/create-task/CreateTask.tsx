@@ -4,7 +4,6 @@ import { API_URL } from "@/app/globals";
 import api from "@/services/api.service";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Icon from "@/components/icon/Icon";
 import { useLoading } from "@/context/LoadingContext";
 

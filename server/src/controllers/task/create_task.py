@@ -29,7 +29,7 @@ def create_task(userId, data, workarea_id):
 
         task = Task(
             title=data.get('title'),
-            description=data.get('description'),
+            description=data.get('description') if data.get('description') else None,
             work_area=workarea_id,
             time_estimate=datetime.fromisoformat(data.get('timeEstimate')) if data.get('timeEstimate') else None,
             user=data.get('userId') if data.get('userId') else None

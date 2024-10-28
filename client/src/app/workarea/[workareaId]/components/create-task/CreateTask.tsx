@@ -32,9 +32,9 @@ type IPromiseHttpResponse = {
 
 type ITaskHttp = {
   title: string;
-  description: string;
-  timeEstimate: Date;
-  userId: number;
+  description?: string;
+  timeEstimate?: Date;
+  userId?: number;
 };
 
 type IProps = {
@@ -71,6 +71,8 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
       loading.toggle();
       const url = `${API_URL}/workarea/${workareaId}/task`;
       const request = api.post(url, task);
+
+      if (typeof task.userId == "string") delete task.userId;
 
       const createdTask = await toast.promise(request, {
         pending: "Creating task...",

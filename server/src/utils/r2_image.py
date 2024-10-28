@@ -1,6 +1,7 @@
 import boto3
 import base64
 import os
+from datetime import datetime
 
 R2_ENDPOINT_URL = os.getenv("R2_ENDPOINT_URL")
 R2_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
@@ -15,17 +16,26 @@ s3_client = boto3.client(
     region_name='auto',
 )
 
-def r2_image(base64_string, userId):
+def r2_image(base64_string, userId, oldFileName=None):
     if ',' in base64_string:
         base64_string = base64_string.split(',')[1]
     
     image_data = base64.b64decode(base64_string)
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    file_key = f'{userId}.{timestamp}.jpg'
+
+    if oldFileName:
+        try:
+            s3_client.delete_object(Bucket=R2_BUCKET_NAME, Key=oldFileName)
+            print(f'Arquivo antigo {oldFileName} deletado com sucesso.')
+        except Exception as e:
+            print(f'Erro ao deletar o arquivo {oldFileName}: {str(e)}')
 
     s3_client.put_object(
         Bucket=R2_BUCKET_NAME,
-        Key=f'{userId}.jpg',
+        Key=file_key,
         Body=image_data,
         ContentType='image/jpeg'
     )
 
-    return f'https://pub-1e774adbecc2425fb049dc46d39cc1bb.r2.dev/{userId}.jpg'
+    return f'https://pub-1e774adbecc2425fb049dc46d39cc1bb.r2.dev/{file_key}'

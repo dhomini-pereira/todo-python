@@ -1,4 +1,3 @@
-from peewee import DoesNotExist
 from flask import jsonify
 from src.models.user import User
 from src.models.member_work_area import MemberWorkArea

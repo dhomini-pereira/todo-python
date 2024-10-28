@@ -21,7 +21,7 @@ def edit_user(userId, data):
             user.password = hashlib.sha256(data.get('password').encode('utf-8')).hexdigest()
         
         if data.get('image_url'):
-            url = r2_image(data.get('image_url'), user.id)
+            url = r2_image(data.get('image_url'), user.id, user.image_url)
             user.image_url = url
         
         user.save()

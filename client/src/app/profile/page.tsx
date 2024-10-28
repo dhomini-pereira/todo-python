@@ -8,6 +8,7 @@ import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 type IUser = {
   createdAt: string;
@@ -122,36 +123,82 @@ export default function Profile() {
             </p>
           </div>
           <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex">
-            <form onSubmit={handleSubmit(handle)} className="flex flex-col">
-              <input type="file" {...register("image_url")} />
-              <input
-                type="text"
-                placeholder="Username"
-                autoComplete="off"
-                defaultValue={user?.username}
-                {...register("username")}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                autoComplete="off"
-                defaultValue={user?.email}
-                {...register("email")}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                autoComplete="off"
-                {...register("password")}
-              />
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                autoComplete="off"
-                {...register("confirm_password")}
-              />
-              <input type="submit" value="Save" />
-            </form>
+            <div className="text-white flex flex-col w-1/4 top-2/4 left-2/4 absolute -translate-x-1/2 -translate-y-1/2 p-[10px]">
+              <h1 className="mb-[25px] font-semibold">Editar perfil</h1>
+              <div className="bg-slate-800 p-[10px] flex justify-between items-center mb-[25px] rounded-[10px]">
+                <div className="flex flex-row items-center">
+                  {user?.image_url ? (
+                    <img
+                      className="h-10 w-10 object-cover rounded-full"
+                      src={user.image_url}
+                      alt=""
+                      
+                    />
+                  ) : (
+                    <img
+                      className="h-10 w-10 object-cover rounded-full"
+                      src="https://i.pinimg.com/564x/8e/21/fe/8e21fe649773e128dc40d1f112c01b13.jpg"
+                      alt=""
+                     
+                    />
+                  )}
+                  <p className="font-semibold ml-5">Usuário</p>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    className="p-[7px] font-semibold rounded-[5px] border-none cursor-pointer bg-blue-500 text-white hover:bg-blue-900 ease-in duration-200"
+                  >
+                    Change photo
+                  </button>
+                </div>
+              </div>
+              <div className="placeholder:opacity[1] placeholder:text-[#9ca3af] placeholder:font-semibold placeholder:text-[1.3em]">
+                <form
+                  className="bg-slate-800 p-[15px] flex flex-col h-[35vh] rounded-lg mb-[30px] gap-3"
+                  onSubmit={handleSubmit(handle)}
+                >
+                  <div>
+                    <h2 className="text-[2em] font-semibold pl-[5px]">
+                      Informations
+                    </h2>
+                    <p className="text-[0.90em] font-thin pl-[5px] mb-5">
+                      Change your information here
+                    </p>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Usuário"
+                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    {...register("username")}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    {...register("email")}
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    {...register("password")}
+                  />
+                  <input
+                    type="password"
+                    placeholder="Confirm password"
+                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    {...register("confirm_password")}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200"
+                  >
+                    Save
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

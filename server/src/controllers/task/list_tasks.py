@@ -27,6 +27,7 @@ def list_tasks(filters, userId, id):
         query = (
             Task
             .select()
+            .distinct()
             .join(WorkArea, on=(Task.work_area == WorkArea.id))
             .join(MemberWorkArea, JOIN.LEFT_OUTER, on=(MemberWorkArea.work_area == WorkArea.id))
             .where(

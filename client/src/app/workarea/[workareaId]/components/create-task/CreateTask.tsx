@@ -69,10 +69,18 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
   async function handleTask(task: ITaskHttp) {
     try {
       loading.toggle();
-      const url = `${API_URL}/workarea/${workareaId}/task`;
-      const request = api.post(url, task);
+      for await (let i of Object.keys(task)) {
+        if (
+          !task[i as keyof ITaskHttp] ||
+          task[i as keyof ITaskHttp] === "" ||
+          task[i as keyof ITaskHttp] === "select"
+        )
+          delete task[i as keyof ITaskHttp];
+      }
 
-      if (typeof task.userId == "string") delete task.userId;
+      const url = `${API_URL}/workarea/${workareaId}/task`;
+
+      const request = api.post(url, task);
 
       const createdTask = await toast.promise(request, {
         pending: "Creating task...",
@@ -122,7 +130,7 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               type="text"
               className="ease-in-out duration-250 focus:border-slate-400 outline-none h-full rounded-sm p-1 text-white bg-slate-900 placeholder:text-slate-600 indent-2 border-[1px] border-slate-600"
               id="title"
-              {...register("title")}
+              {...register("title", { required: true })}
             />
           </div>
           <div className="flex flex-col">

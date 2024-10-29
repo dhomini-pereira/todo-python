@@ -4,12 +4,12 @@ from src.models.work_area import WorkArea, TypeWorkArea
 
 def create_workarea(userId, data):
     try:
-        if not data.get('name'):
+        if not data.get('name') and not data.get('type'):
             return jsonify({ 'error': 'Invalid data' }), 400
 
         workarea = WorkArea(
             name=data.get('name'),
-            type_work_area=TypeWorkArea.PROFESSIONAL.value,
+            type_work_area=TypeWorkArea[data.get('type')].value,
             owner_id=userId
         )
         workarea.save()

@@ -1,13 +1,10 @@
 from peewee import DoesNotExist, IntegrityError
 from flask import jsonify
-from src.models.work_area import WorkArea, TypeWorkArea
+from src.models.work_area import WorkArea
 
 def delete_workarea(workarea_id, userId):
     try:
         workarea = WorkArea.get(id=workarea_id, owner=userId)
-
-        if workarea.type_work_area == TypeWorkArea.PERSONAL.value:
-            return jsonify({'error': 'Personal workarea cannot be deleted'}), 400
 
         workarea.delete_instance()
 

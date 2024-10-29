@@ -7,7 +7,7 @@ from peewee import JOIN
 from datetime import datetime
 
 def create_task(userId, data, workarea_id):
-    if not data.get('title') or not data.get('description'):
+    if not data.get('title'):
         return jsonify({'error': 'Invalid data'}), 400
 
     try:

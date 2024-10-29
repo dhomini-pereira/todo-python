@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from src.controllers.user.create_user import create_user
+from src.controllers.user.decode_user import decode_user
 from src.controllers.user.login_user import login_user
 from src.controllers.task.list_tasks import list_tasks
 from src.controllers.task.del_task import del_task
@@ -72,8 +73,8 @@ def update_user():
 
 @app.get("/user")
 def get_user():
-    user = decode_token(request.headers.get('Authorization')).get('data')
-    return jsonify(user)
+    userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
+    return decode_user(userId)
 
 @app.get("/workarea/<workarea_id>/task")
 def list_of_tasks(workarea_id):

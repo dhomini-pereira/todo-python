@@ -6,7 +6,7 @@ import api from "@/services/api.service";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { toast } from "react-toastify";
 
 type IUser = {
@@ -28,14 +28,19 @@ export default function Profile() {
   const { isActive } = useNavbar();
   const loading = useLoading();
   const [user, setUser] = useState<IUser>();
-  const { register, handleSubmit } = useForm<IUserUpdate>();
+  const { register, handleSubmit, reset, control } = useForm<IUserUpdate>();
 
+  
   useEffect(() => {
     (async () => {
       try {
         loading.toggle();
         const response = await api.get(`${API_URL}/user`);
         const data: IUser = response.data;
+        reset({
+          email: data.email,
+          username: data.username,
+        });
         setUser(data);
       } catch (e: any) {
         alert(e.response.data.error);
@@ -44,7 +49,9 @@ export default function Profile() {
       }
     })();
   }, []);
-
+  
+  const { isDirty } = useFormState({ control });
+  
   const changePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       loading.toggle();
@@ -162,7 +169,7 @@ export default function Profile() {
                 <div>
                   <label
                     htmlFor="image_url"
-                    className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200 p-2 cursor-pointer"
+                    className="py-2 px-4 bg-sky-600 text-white rounded-md hover:bg-sky-700 ease-in-out duration-500 cursor-pointer"
                   >
                     Change photo
                   </label>
@@ -191,30 +198,31 @@ export default function Profile() {
                   <input
                     type="text"
                     placeholder="Usuário"
-                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    className="p-2 rounded-md bg-slate-700 text-slate-200"
                     {...register("username")}
                   />
                   <input
                     type="email"
                     placeholder="Email"
-                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    className="p-2 rounded-md bg-slate-700 text-slate-200"
                     {...register("email")}
                   />
                   <input
                     type="password"
                     placeholder="Password"
-                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    className="p-2 rounded-md bg-slate-700 text-slate-200"
                     {...register("password")}
                   />
                   <input
                     type="password"
                     placeholder="Confirm password"
-                    className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+                    className="p-2 rounded-md bg-slate-700 text-slate-200"
                     {...register("confirm_password")}
                   />
                   <button
                     type="submit"
-                    className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200"
+                    className="py-2 px-4 bg-sky-600 text-white rounded-md hover:bg-sky-700 ease-in-out duration-500"
+                    disabled={!isDirty}
                   >
                     Save
                   </button>

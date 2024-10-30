@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import DeleteWorkarea from "./components/DeleteWorkarea";
 
 type IUpdateWorkarea = {
   name: string;
@@ -177,13 +178,11 @@ export default function Settings() {
                       />
                     </svg>
                   </button>
-                  <button className="submit border-[1px] border-red-500 hover:bg-red-500 w-[10%] flex items-center justify-center rounded-md transition-all duration-200 hover:text-white text-red-500">
-                    <Icon iconName="trash"  className="w-6 "/>
-                  </button>
+                  <DeleteWorkarea workareaId={workareaId} />
                 </div>
               </form>
               <div className="w-full overflow-x-auto">
-              <div>
+                <div>
                   <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
@@ -269,7 +268,6 @@ export default function Settings() {
                     ))}
                   </tbody>
                 </table>
-
               </div>
             </div>
           </div>

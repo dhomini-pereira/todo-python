@@ -25,6 +25,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
+      sessionStorage.removeItem("TOKEN");
       window.location.href = "/signin";
     }
 

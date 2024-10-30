@@ -54,7 +54,7 @@ export default function WorkAreaInfo() {
   const { isActive } = useNavbar();
   const [hydrated, setHydrated] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
-  const [selectedEditTask, setSelectedEditTask] = useState<ITask | null>(null);
+  const [selectedEditTask, setSelectedEditTask] = useState<ITask>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const loading = useLoading();
@@ -175,15 +175,15 @@ export default function WorkAreaInfo() {
           setTasks={setTasks}
           workareaId={workareaId}
           taskId={selectedTask?.id}
-          closeModal={closeEditModal}
+          closeModal={closeModal}
         />
       )}
       {showEditModal && (
         <EditTask
           setTasks={setTasks}
           workareaId={workareaId}
-          task={selectedTask}
-          closeModal={closeModal}
+          task={selectedEditTask}
+          closeModal={closeEditModal}
         />
       )}
       <div
@@ -247,9 +247,11 @@ export default function WorkAreaInfo() {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    onClick={() => openEditModal(task)}
                                   >
-                                    <h1 className="text-slate-200">
+                                    <h1
+                                      onClick={() => openEditModal(task)}
+                                      className="text-slate-200 cursor-pointer hover:underline"
+                                    >
                                       {task.title}
                                     </h1>
                                     <Icon

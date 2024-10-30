@@ -14,7 +14,7 @@ interface IProps {
     | "minus"
     | "app";
   className?: string;
-  onClick?: () => void | Promise<void>;
+  onClick?: (e: any) => void | Promise<void>;
 }
 
 export default function Icon({ iconName, className, onClick }: IProps) {

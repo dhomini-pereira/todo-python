@@ -1,0 +1,9 @@
+input[type="date"]::-webkit-calendar-picker-indicator {
+  @apply cursor-pointer;
+
+  filter: invert(0.9) brightness(100%);
+}
+
+option:hover {
+  @apply bg-red-500 cursor-pointer;
+}

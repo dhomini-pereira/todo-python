@@ -128,7 +128,7 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
             </label>
             <input
               type="text"
-              className="ease-in-out duration-250 focus:border-slate-400 outline-none h-full rounded-sm p-1 text-white bg-slate-900 placeholder:text-slate-600 indent-2 border-[1px] border-slate-600"
+              className="p-2 rounded-md bg-slate-700 text-slate-200"
               id="title"
               {...register("title", { required: true })}
             />
@@ -139,7 +139,7 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
             </label>
             <input
               type="date"
-              className="ease-in-out duration-250 focus:border-slate-400 outline-none rounded-sm indent-1 p-1 bg-slate-900 text-slate-200 border-[1px] border-slate-600"
+              className="p-2 rounded-md bg-slate-700 text-slate-200"
               id="timeEstimate"
               {...register("timeEstimate")}
             />
@@ -150,7 +150,7 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
             </label>
             <select
               id="userId"
-              className="ease-in-out duration-250 focus:border-slate-400 outline-none bg-slate-900 p-1 border-[1px] border-slate-600 text-white rounded-sm"
+              className="p-2 rounded-md bg-slate-700 text-slate-200"
               {...register("userId")}
               defaultValue="select"
             >
@@ -167,7 +167,7 @@ export default function CreateTask({ workareaId, setTasks }: IProps) {
               Description
             </label>
             <textarea
-              className="indent-2 text-white ease-in-out duration-250 focus:border-slate-400 outline-none resize-none h-28 rounded-sm border-[1px] border-slate-600 bg-slate-900"
+              className="p-2 rounded-md bg-slate-700 text-slate-200"
               id="description"
               {...register("description")}
             ></textarea>

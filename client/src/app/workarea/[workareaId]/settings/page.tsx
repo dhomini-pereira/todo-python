@@ -150,67 +150,87 @@ export default function Settings() {
               workarea to fit your needs.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex">
-            <div>
+          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex justify-center items-center h-full">
+            <div className="flex flex-col gap-6 justify-center h-fit w-fit">
               <form
                 className="flex flex-col"
                 onSubmit={handleSubmit(handleUpdateWorkarea)}
               >
-                <input
-                  type="text"
-                  placeholder={workarea?.name}
-                  {...register("name", { required: true })}
-                />
-                <input type="text" defaultValue={workarea?.type} disabled />
-                <button type="submit">Save</button>
-              </form>
-              <div className="mt-8">
-                <Modal
-                  isOpen={isModalOpen}
-                  setIsOpen={setIsModalOpen}
-                  trigger={
-                    <Icon
-                      iconName="plus"
-                      className="cursor-pointer h-8 text-slate-200"
-                    />
-                  }
-                >
-                  <div className="bg-slate-800 p-5 rounded-md shadow-md relative w-1/3 min-w-[500px] max-sm:min-w-[90%]">
-                    <h2 className="text-xl text-slate-200 mb-4">
-                      Adicionar Usuário
-                    </h2>
-                    <form
-                      className="flex flex-col gap-4"
-                      onSubmit={handleSubmitUser(handleAddUser)}
+                <div className="flex  w-full gap-4">
+                  <input
+                    type="text"
+                    placeholder={workarea?.name}
+                    {...register("name", { required: true })}
+                    className="w-[80%] bg-slate-800 border-2 focus:bg-slate-950 border-blue-800 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200 text-white"
+                  />
+                  <button className="submit bg-blue-500 hover:bg-blue-600 w-[10%] flex items-center justify-center rounded-md transition-all duration-200">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-6 text-white"
                     >
-                      <input
-                        type="text"
-                        {...registerUser("username", {
-                          required: "Username é obrigatório",
-                        })}
-                        placeholder="Digite o username do usuário"
-                        className="p-2 rounded-md bg-slate-700 text-slate-200"
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                        clip-rule="evenodd"
                       />
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsModalOpen(false)}
-                          className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-                        >
-                          Cancelar
-                        </button>
-                        <button
-                          type="submit"
-                          className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                        >
-                          Adicionar
-                        </button>
+                    </svg>
+                  </button>
+                  <button className="submit border-[1px] border-red-500 hover:bg-red-500 w-[10%] flex items-center justify-center rounded-md transition-all duration-200 hover:text-white text-red-500">
+                    <Icon iconName="trash"  className="w-6 "/>
+                  </button>
+                </div>
+              </form>
+              <div className="w-full overflow-x-auto">
+              <div>
+                  <Modal
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                    trigger={
+                      <div className="bg-slate-700 hover:bg-slate-950 h-14 flex items-center justify-center transition-all duration-200 cursor-pointer">
+                        <Icon
+                          iconName="plus"
+                          className="cursor-pointer h-8 text-slate-200 size-16"
+                        />
                       </div>
-                    </form>
-                  </div>
-                </Modal>
-              </div>
-              <div className="mt-8 w-full overflow-x-auto">
+                    }
+                  >
+                    <div className="bg-slate-800 p-5 rounded-md shadow-md relative w-1/3 min-w-[500px] max-sm:min-w-[90%]">
+                      <h2 className="text-xl text-slate-200 mb-4">
+                        Adicionar Usuário
+                      </h2>
+                      <form
+                        className="flex flex-col gap-4"
+                        onSubmit={handleSubmitUser(handleAddUser)}
+                      >
+                        <input
+                          type="text"
+                          {...registerUser("username", {
+                            required: "Username é obrigatório",
+                          })}
+                          placeholder="Digite o username do usuário"
+                          className="p-2 rounded-md bg-slate-700 text-slate-200"
+                        />
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsModalOpen(false)}
+                            className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            type="submit"
+                            className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                          >
+                            Adicionar
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </Modal>
+                </div>
                 <table className="min-w-full bg-slate-800 text-slate-200">
                   <thead>
                     <tr>
@@ -241,7 +261,7 @@ export default function Settings() {
                         <td className="py-3 px-6">
                           <Icon
                             iconName="minus"
-                            className="h-6 cursor-pointer text-red-500"
+                            className="h-6 cursor-pointer text-red-500 hover:text-white hover:bg-red-500 hover:rounded-full transition-all duration-200"
                             onClick={() => handleRemoveUser(user.username)}
                           />
                         </td>
@@ -249,6 +269,7 @@ export default function Settings() {
                     ))}
                   </tbody>
                 </table>
+
               </div>
             </div>
           </div>

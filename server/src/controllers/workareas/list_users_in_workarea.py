@@ -19,15 +19,17 @@ def list_users_in_workarea(user_id, workarea_id, args):
                 SELECT DISTINCT
                     u.*
                 FROM
-                    users u,
-                    member_work_areas mwa,
+                    users u
+                JOIN
                     work_area wa
-                WHERE
+                ON
                     wa.id = %s
-                AND
-                    mwa.work_area_id = wa.id
-                AND
-                    (mwa.user_id = u.id OR wa.owner_id = u.id)
+               	LEFT JOIN
+                    member_work_areas mwa
+                ON
+                    wa.id = mwa.work_area_id
+                WHERE
+                    (mwa.user_id = u.id OR wa.owner_id = u.id);
             """
 
         users = User.raw(query, workarea_id)

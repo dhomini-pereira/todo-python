@@ -5,16 +5,23 @@ import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
+import { useEffect } from "react";
 
 type IUser = {
   email: string;
   password: string;
 };
 
-export default function Page() {
+export default function SignIn() {
   const { handleSubmit, register } = useForm<IUser>();
   const router = useRouter();
   const loading = useLoading();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("TOKEN")) {
+      router.push("/workarea");
+    }
+  }, []);
 
   async function handleSignIn(user: IUser) {
     try {

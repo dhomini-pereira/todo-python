@@ -5,6 +5,7 @@ import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
+import { useEffect } from "react";
 
 type IUser = {
   username: string;
@@ -16,6 +17,12 @@ export default function Page() {
   const { handleSubmit, register } = useForm<IUser>();
   const router = useRouter();
   const loading = useLoading();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("TOKEN")) {
+      router.push("/workarea");
+    }
+  }, []);
 
   async function handleSignUp(user: IUser) {
     try {

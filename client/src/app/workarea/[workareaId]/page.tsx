@@ -16,6 +16,7 @@ import CreateTask from "./components/create-task/CreateTask";
 import DeleteTask from "./components/delete-task/DeleteTask";
 import Icon from "@/components/icon/Icon";
 import { useLoading } from "@/context/LoadingContext";
+import EditTask from "./components/edit-task/EditTask";
 
 enum TaskStatus {
   PENDING = "PENDING",
@@ -53,7 +54,9 @@ export default function WorkAreaInfo() {
   const { isActive } = useNavbar();
   const [hydrated, setHydrated] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [selectedEditTask, setSelectedEditTask] = useState<ITask | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const loading = useLoading();
   const router = useRouter();
 
@@ -144,8 +147,18 @@ export default function WorkAreaInfo() {
     setShowDeleteModal(true);
   };
 
+  const openEditModal = (task: ITask) => {
+    setSelectedEditTask(task);
+    setShowEditModal(true);
+  };
+
   const closeModal = () => {
     setShowDeleteModal(false);
+    setSelectedTask(null);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
     setSelectedTask(null);
   };
 
@@ -162,6 +175,14 @@ export default function WorkAreaInfo() {
           setTasks={setTasks}
           workareaId={workareaId}
           taskId={selectedTask?.id}
+          closeModal={closeEditModal}
+        />
+      )}
+      {showEditModal && (
+        <EditTask
+          setTasks={setTasks}
+          workareaId={workareaId}
+          task={selectedTask}
           closeModal={closeModal}
         />
       )}
@@ -226,6 +247,7 @@ export default function WorkAreaInfo() {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
+                                    onClick={() => openEditModal(task)}
                                   >
                                     <h1 className="text-slate-200">
                                       {task.title}

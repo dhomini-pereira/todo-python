@@ -134,16 +134,15 @@ export default function Profile() {
         <div className="bg-slate-900 h-[100%] sm:rounded-tl-[150px] flex flex-col items-center justify-start p-8">
           <div className="w-[90%]">
             <h1 className="text-5xl text-slate-200">
-              Welcome, {user?.username}
+              Welcome, {user?.username}!
             </h1>
             <p className="text-slate-500">
               On here you can see and edit informations of your profile.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex">
-            <div className="text-white flex flex-col w-1/4 top-2/4 left-2/4 absolute -translate-x-1/2 -translate-y-1/2 p-[10px]">
-              <h1 className="mb-[25px] font-semibold">Editar perfil</h1>
-              <div className="bg-slate-800 p-[10px] flex justify-between items-center mb-[25px] rounded-[10px]">
+          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex justify-center p-4 h-full">
+            <div className="text-white flex flex-col max-w-[500px] w-full gap-6 justify-center overflow-hidden">
+              <div className="bg-slate-800 p-[10px] flex justify-between items-center rounded-[10px] h-fit">
                 <div className="flex flex-row items-center">
                   {user?.image_url ? (
                     <img
@@ -178,7 +177,7 @@ export default function Profile() {
               </div>
               <div className="placeholder:opacity[1] placeholder:text-[#9ca3af] placeholder:font-semibold placeholder:text-[1.3em]">
                 <form
-                  className="bg-slate-800 p-[15px] flex flex-col h-[35vh] rounded-lg mb-[30px] gap-3"
+                  className="bg-slate-800 p-[15px] flex flex-col rounded-lg gap-3"
                   onSubmit={handleSubmit(handle)}
                 >
                   <div>

@@ -5,6 +5,7 @@ import api from "@/services/api.service";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
+import Icon from "@/components/icon/Icon";
 
 type IWorkarea = {
   createdAt: string;
@@ -59,7 +60,14 @@ export default function WorkArea() {
             <p className="text-slate-500">
               Manage All your activities in a single screen.
             </p>
-            <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex">
+            <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] overflow-y-auto max-sm:flex">
+              <a className="w-[18%] max-md:w-full md:max-w-[300px]">
+                <div
+                  className={`opacity-70 hover:opacity-100 w-[100%] h-[175px] text-center rounded-xl bg-sky-800 hover:bg-sky-700 duration-500 ease-in-out flex items-center justify-center flex-col gap  cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]`}
+                >
+                  <Icon iconName="plus" className="text-white w-20"/>
+                </div>
+              </a>
               {workareas?.map((workarea, index) => (
                 <a
                   href={`/workarea/${workarea.id}`}
@@ -68,11 +76,7 @@ export default function WorkArea() {
                 >
                   <div
                     key={workarea.id}
-                    className={`w-[100%] h-[175px] text-center rounded-xl ${
-                      !index
-                        ? "bg-blue-900 hover:bg-blue-950"
-                        : "bg-sky-700 hover:bg-sky-800"
-                    } duration-500 ease-in-out flex items-center justify-center flex-col gap  cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]`}
+                    className={`w-[100%] h-[175px] text-center rounded-xl bg-sky-700 hover:bg-sky-800 duration-500 ease-in-out flex items-center justify-center flex-col gap  cursor-pointer max-md:w-full max-md:h-[100px] md:max-w-[300px]`}
                   >
                     <h2 className="text-3xl text-slate-200 max-lg:text-xl">
                       {workarea.name}

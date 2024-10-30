@@ -176,7 +176,7 @@ export default function WorkAreaInfo() {
               <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
               <Icon
                 iconName="settings"
-                className="w-11 h-11 p-2 text-white cursor-pointer rounded-full hover:bg-zinc-800 ease-in-out duration-500"
+                className="w-11 h-11 p-2 text-white cursor-pointer rounded-full hover:bg-slate-700 ease-in-out duration-500"
                 onClick={() => router.push(`/workarea/${workareaId}/settings`)}
               />
             </div>

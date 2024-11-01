@@ -12,6 +12,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import DeleteWorkarea from "./components/DeleteWorkarea";
+import { IUser } from "@/interfaces/user.interface";
+import { IWorkarea } from "@/interfaces/workarea.interface";
 
 type IUpdateWorkarea = {
   name: string;
@@ -19,21 +21,6 @@ type IUpdateWorkarea = {
 
 type IAddUser = {
   username: string;
-};
-
-type IWorkarea = {
-  id: number;
-  name: string;
-  type: "PROFESSIONAL" | "PERSONAL";
-  createdAt: string;
-  updatedAt: string;
-};
-
-type IUser = {
-  id: number;
-  email: string;
-  username: string;
-  image_url: null | string;
 };
 
 export default function Settings() {
@@ -49,95 +36,83 @@ export default function Settings() {
   const [workarea, setWorkarea] = useState<IWorkarea>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [users, setUsers] = useState<IUser[]>([]);
+  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     (async () => {
       try {
         loading.toggle();
-        const [workareaRequest, membersRequest] = await Promise.all([
-          api.get(`${API_URL}/workarea/${workareaId}`),
-          api.get(`${API_URL}/workarea/${workareaId}/member?member=true`),
-        ]);
+        const [workareaRequest, membersRequest, userRequest] =
+          await Promise.all([
+            api.get(`${API_URL}/workarea/${workareaId}`),
+            api.get(`${API_URL}/workarea/${workareaId}/member?member=true`),
+            api.get(`${API_URL}/user`),
+          ]);
         setWorkarea(workareaRequest.data);
         setUsers(membersRequest.data.users);
+        setUser(userRequest.data);
       } catch (err: any) {
-        alert(err.response?.data?.error);
+        toast.error(err.response?.data?.error);
       } finally {
         loading.toggle();
       }
     })();
   }, []);
 
-  const handleUpdateWorkarea = async (data: IUpdateWorkarea) => {
-    try {
-      loading.toggle();
-      const request = await toast.promise(
-        api.put(`${API_URL}/workarea/${workareaId}`, data),
-        {
-          pending: "Atualizando workarea...",
-          success: "Workarea atualizada com sucesso!",
-          error: "Erro ao atualizar workarea",
-        }
-      );
-
-      setWorkarea((prev) => {
-        if (prev) {
-          return {
-            ...prev,
-            name: request.data.name,
-          };
-        }
-      });
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Erro ao atualizar workarea");
-    } finally {
-      loading.toggle();
-    }
+  const handleUpdateWorkarea = (data: IUpdateWorkarea) => {
+    toast
+      .promise(api.put(`${API_URL}/workarea/${workareaId}`, data), {
+        pending: "Updating workarea...",
+        success: "Updated workarea successfully!",
+      })
+      .then((request) => {
+        setWorkarea((prev) => {
+          if (prev) {
+            return {
+              ...prev,
+              name: request.data.name,
+            };
+          }
+        });
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
-  const handleAddUser = async (data: IAddUser) => {
-    try {
-      loading.toggle();
-      const request = await toast.promise(
+  const handleAddUser = (data: IAddUser) => {
+    toast
+      .promise(
         api.post(`${API_URL}/workarea/${workareaId}/member/${data.username}`),
         {
-          pending: "Adicionando usuário...",
-          success: "Usuário adicionado com sucesso!",
-          error: "Erro ao adicionar usuário",
+          pending: "Add user...",
+          success: "User added successfully!",
         }
-      );
-      setIsModalOpen(false);
-      resetUserForm();
-      setUsers((prev) => (prev ? [...prev, request.data] : [request.data]));
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Erro ao adicionar usuário");
-    } finally {
-      loading.toggle();
-    }
+      )
+      .then((request) => {
+        setIsModalOpen(false);
+        resetUserForm();
+        setUsers((prev) => (prev ? [...prev, request.data] : [request.data]));
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
-  const handleRemoveUser = async (username: string) => {
-    try {
-      loading.toggle();
-      await toast.promise(
+  const handleRemoveUser = (username: string) => {
+    toast
+      .promise(
         api.delete(`${API_URL}/workarea/${workareaId}/member/${username}`),
         {
-          pending: "Removendo usuário...",
-          success: "Usuário removido com sucesso!",
-          error: "Erro ao remover usuário",
+          pending: "Removing user...",
+          success: "User removed successfully!",
         }
-      );
-      setUsers(users.filter((user) => user.username !== username));
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Erro ao remover usuário");
-    } finally {
-      loading.toggle();
-    }
+      )
+      .then(() => {
+        setUsers(users.filter((user) => user.username !== username));
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
   return (
     <div className="h-full">
-      <Navbar />
+      <Navbar user={user} />
       <div
         className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
@@ -165,18 +140,7 @@ export default function Settings() {
                     className="w-[80%] bg-slate-800 border-2 focus:bg-slate-950 border-blue-800 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200 text-white"
                   />
                   <button className="submit bg-blue-500 hover:bg-blue-600 w-[10%] flex items-center justify-center rounded-md transition-all duration-200">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-6 text-white"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
+                    <Icon iconName="check" className="w-6 text-white" />
                   </button>
                   <DeleteWorkarea workareaId={workareaId} />
                 </div>
@@ -196,20 +160,22 @@ export default function Settings() {
                     }
                   >
                     <div className="bg-slate-800 p-5 rounded-md shadow-md relative w-1/3 min-w-[500px] max-sm:min-w-[90%]">
-                      <h2 className="text-xl text-slate-200 mb-4">
-                        Adicionar Usuário
-                      </h2>
+                      <h2 className="text-xl text-slate-200 mb-4">Add user</h2>
                       <form
-                        className="flex flex-col gap-4"
+                        className="flex flex-col gap-4 relative"
                         onSubmit={handleSubmitUser(handleAddUser)}
                       >
                         <input
                           type="text"
                           {...registerUser("username", {
-                            required: "Username é obrigatório",
+                            required: true,
                           })}
-                          placeholder="Digite o username do usuário"
+                          placeholder="Username"
                           className="p-2 rounded-md bg-slate-700 text-slate-200"
+                        />
+                        <Icon
+                          className="absolute top-2 right-2 h-6 text-slate-200"
+                          iconName="atsign"
                         />
                         <div className="flex justify-end gap-2">
                           <button
@@ -217,13 +183,13 @@ export default function Settings() {
                             onClick={() => setIsModalOpen(false)}
                             className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700"
                           >
-                            Cancelar
+                            Cancel
                           </button>
                           <button
                             type="submit"
                             className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                           >
-                            Adicionar
+                            Add
                           </button>
                         </div>
                       </form>

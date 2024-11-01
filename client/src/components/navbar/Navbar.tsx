@@ -1,11 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Sidebar from "../sidebar/Sidebar";
 import { useNavbar } from "@/context/NavbarContext";
-import api from "@/services/api.service";
-import { API_URL } from "@/app/globals";
 import Icon from "../icon/Icon";
-import { useLoading } from "@/context/LoadingContext";
 
 type IUser = {
   createdAt: string;
@@ -15,25 +12,12 @@ type IUser = {
   username: string;
 };
 
-export default function Navbar() {
-  const { isActive, toggle } = useNavbar();
-  const [user, setUser] = useState<IUser>();
-  const loading = useLoading();
+type IProps = {
+  user: IUser | undefined;
+};
 
-  useEffect(() => {
-    (async () => {
-      try {
-        loading.toggle();
-        const response = await api.get(`${API_URL}/user`);
-        const data: IUser = response.data;
-        setUser(data);
-      } catch (e: any) {
-        alert(e.response.data.error);
-      } finally {
-        loading.toggle();
-      }
-    })();
-  }, []);
+export default function Navbar({ user }: IProps) {
+  const { isActive, toggle } = useNavbar();
 
   return (
     <div className="bg-[#0A070E] w-screen text-slate-200 h-12 text-lg flex items-center justify-between pl-4 pr-10">

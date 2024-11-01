@@ -1,7 +1,6 @@
 import { API_URL } from "@/app/globals";
 import Icon from "@/components/icon/Icon";
 import Modal from "@/components/modal/Modal";
-import { useLoading } from "@/context/LoadingContext";
 import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -17,25 +16,19 @@ export default function CreateWorkarea() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit } = useForm<CreateWorkarea>();
   const router = useRouter();
-  const loading = useLoading();
 
-  const handle = async (data: CreateWorkarea) => {
-    try {
-      loading.toggle();
-      const workarea = await toast.promise(
-        api.post(`${API_URL}/workarea`, data),
-        {
-          pending: "Creating workarea...",
-          success: "Workarea created successfully 👌",
-          error: "Error creating workarea 🤯",
-        }
-      );
-
-      router.push(`/workarea/${workarea.data.id}`);
-    } catch (err: any) {
-    } finally {
-      loading.toggle();
-    }
+  const handle = (data: CreateWorkarea) => {
+    toast
+      .promise(api.post(`${API_URL}/workarea`, data), {
+        pending: "Creating workarea...",
+        success: "Workarea created successfully 👌",
+      })
+      .then((request) => {
+        router.push(`/workarea/${request.data.id}`);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   return (

@@ -17,23 +17,9 @@ import DeleteTask from "./components/delete-task/DeleteTask";
 import Icon from "@/components/icon/Icon";
 import { useLoading } from "@/context/LoadingContext";
 import EditTask from "./components/edit-task/EditTask";
-
-enum TaskStatus {
-  PENDING = "PENDING",
-  PROGRESSING = "PROGRESSING",
-  DONE = "DONE",
-}
-
-type ITask = {
-  id: number;
-  title: string;
-  createdAt: string;
-  description: string;
-  status: TaskStatus;
-  timeEstimate: string;
-  updatedAt: string;
-  userId: number;
-};
+import { toast } from "react-toastify";
+import { ITask, TaskStatus } from "@/interfaces/task.interface";
+import { IUser } from "@/interfaces/user.interface";
 
 type IPromiseHttpResponse = {
   pending: ITask[];
@@ -57,6 +43,8 @@ export default function WorkAreaInfo() {
   const [selectedEditTask, setSelectedEditTask] = useState<ITask>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [user, setUser] = useState<IUser>();
   const loading = useLoading();
   const router = useRouter();
 
@@ -71,14 +59,24 @@ export default function WorkAreaInfo() {
       try {
         loading.toggle();
         const url = `${API_URL}/workarea/${workareaId}/task?page=${page}`;
-        const [pendingTasks, progressingTasks, doneTasks, workarea] =
-          await Promise.all([
-            api.get(url + "&status=PENDING").catch(handleError),
-            api.get(url + "&status=PROGRESSING").catch(handleError),
-            api.get(url + "&status=DONE").catch(handleError),
-            api.get(`${API_URL}/workarea/${workareaId}`),
-          ]);
+        const [
+          pendingTasks,
+          progressingTasks,
+          doneTasks,
+          workarea,
+          usersList,
+          user,
+        ] = await Promise.all([
+          api.get(url + "&status=PENDING"),
+          api.get(url + "&status=PROGRESSING"),
+          api.get(url + "&status=DONE"),
+          api.get(`${API_URL}/workarea/${workareaId}`),
+          api.get(`${API_URL}/workarea/${workareaId}/member`),
+          api.get(`${API_URL}/user`),
+        ]);
         setTitle(workarea.data.name);
+        setUsers(usersList.data.users);
+        setUser(user.data);
 
         const httpResponse: IPromiseHttpResponse = {
           pending: pendingTasks.data.tasks,
@@ -88,20 +86,12 @@ export default function WorkAreaInfo() {
 
         setTasks(httpResponse);
       } catch (err: any) {
-        console.log(err);
-        alert(err.response?.data?.error || "Erro desconhecido");
+        toast.error(err.response?.data?.error);
       } finally {
         loading.toggle();
       }
     })();
   }, [hydrated, workareaId, page]);
-
-  const handleError = (err: any) => {
-    if (err.response?.status === 404) {
-      return { data: { tasks: [] } };
-    }
-    throw err;
-  };
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -138,7 +128,7 @@ export default function WorkAreaInfo() {
           ],
       });
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.response?.data?.error);
     }
   };
 
@@ -168,8 +158,8 @@ export default function WorkAreaInfo() {
 
   return (
     <div className="h-full">
-      <Navbar />
-      <CreateTask setTasks={setTasks} workareaId={workareaId} />
+      <Navbar user={user} />
+      <CreateTask setTasks={setTasks} workareaId={workareaId} users={users} />
       {showDeleteModal && (
         <DeleteTask
           setTasks={setTasks}
@@ -184,6 +174,7 @@ export default function WorkAreaInfo() {
           workareaId={workareaId}
           task={selectedEditTask}
           closeModal={closeEditModal}
+          users={users}
         />
       )}
       <div

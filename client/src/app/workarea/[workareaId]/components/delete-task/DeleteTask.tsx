@@ -1,27 +1,11 @@
 import { API_URL } from "@/app/globals";
 import Modal from "@/components/modal/Modal";
 import { useLoading } from "@/context/LoadingContext";
+import { ITask } from "@/interfaces/task.interface";
 import api from "@/services/api.service";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
-enum TaskStatus {
-  PENDING = "PENDING",
-  PROGRESSING = "PROGRESSING",
-  DONE = "DONE",
-}
-
-type ITask = {
-  id: number;
-  title: string;
-  createdAt: string;
-  description: string;
-  status: TaskStatus;
-  timeEstimate: string;
-  updatedAt: string;
-  userId: number;
-};
 
 type IPromiseHttpResponse = {
   pending: ITask[];
@@ -43,31 +27,28 @@ export default function DeleteTask({
   closeModal,
 }: IProps) {
   const { handleSubmit } = useForm();
-  const loading = useLoading();
 
-  const handleDeleteTask = async () => {
-    try {
-      loading.toggle();
-      const url = `${API_URL}/workarea/${workareaId}/task/${taskId}`;
+  const handleDeleteTask = () => {
+    const url = `${API_URL}/workarea/${workareaId}/task/${taskId}`;
 
-      await toast.promise(api.delete(url), {
-        error: "Error deleting task",
+    toast
+      .promise(api.delete(url), {
         pending: "Deleting task...",
         success: "Task deleted successfully 👌",
-      });
+      })
+      .then((_) => {
+        setTasks((prevState) => ({
+          ...prevState,
+          pending: prevState.pending.filter((task) => task.id !== taskId),
+          progressing: prevState.progressing.filter(
+            (task) => task.id !== taskId
+          ),
+          done: prevState.done.filter((task) => task.id !== taskId),
+        }));
 
-      setTasks((prevState) => ({
-        ...prevState,
-        pending: prevState.pending.filter((task) => task.id !== taskId),
-        progressing: prevState.progressing.filter((task) => task.id !== taskId),
-        done: prevState.done.filter((task) => task.id !== taskId),
-      }));
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Erro desconhecido");
-    } finally {
-      loading.toggle();
-      closeModal();
-    }
+        closeModal();
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
   return (

@@ -5,16 +5,10 @@ import api from "@/services/api.service";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
-import Icon from "@/components/icon/Icon";
 import CreateWorkarea from "./components/CreateWorkarea";
-
-type IWorkarea = {
-  createdAt: string;
-  id: number;
-  name: string;
-  type: "PERSONAL" | "PROFESSIONAL";
-  updatedAt: string;
-};
+import { toast } from "react-toastify";
+import { IUser } from "@/interfaces/user.interface";
+import { IWorkarea } from "@/interfaces/workarea.interface";
 
 type IResponseWorkarea = {
   workareas: IWorkarea[];
@@ -24,23 +18,26 @@ export default function WorkArea() {
   const { isActive } = useNavbar();
   const [workareas, setWorkareas] = useState<IWorkarea[]>([]);
   const loading = useLoading();
+  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     (async () => {
       try {
         loading.toggle();
-        const { data }: { data: IResponseWorkarea } = await api.get(
-          `${API_URL}/workarea`
-        );
+        const [{ data }, userR] = await Promise.all([
+          api.get(`${API_URL}/workarea`),
+          api.get(`${API_URL}/user`),
+        ]);
+        setUser(userR.data);
         setWorkareas(
-          data.workareas.sort((a, b) => {
+          (data as IResponseWorkarea).workareas.sort((a, b) => {
             if (a.type === "PERSONAL") return -1;
             if (b.type === "PERSONAL") return 1;
             return 0;
           })
         );
       } catch (e: any) {
-        alert(e.response.data.error);
+        toast.error(e.response.data.error);
       } finally {
         loading.toggle();
       }
@@ -49,7 +46,7 @@ export default function WorkArea() {
 
   return (
     <div className="h-full">
-      <Navbar />
+      <Navbar user={user} />
       <div
         className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
@@ -59,7 +56,7 @@ export default function WorkArea() {
           <div className="h-[90%] block w-[90%]">
             <h1 className="text-5xl text-slate-200">Work Areas</h1>
             <p className="text-slate-500">
-              Manage All your activities in a single screen.
+              Manage all your activities in a single screen.
             </p>
             <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] overflow-y-auto max-sm:flex">
               <CreateWorkarea />

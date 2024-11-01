@@ -1,28 +1,11 @@
 import Modal from "@/components/modal/Modal";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { API_URL } from "@/app/globals";
 import api from "@/services/api.service";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Icon from "@/components/icon/Icon";
-import { useLoading } from "@/context/LoadingContext";
-
-enum TaskStatus {
-  PENDING = "PENDING",
-  PROGRESSING = "PROGRESSING",
-  DONE = "DONE",
-}
-
-type ITask = {
-  id: number;
-  title: string;
-  createdAt: string;
-  description: string;
-  status: TaskStatus;
-  timeEstimate: string;
-  updatedAt: string;
-  userId: number;
-};
+import { ITask } from "@/interfaces/task.interface";
 
 type IPromiseHttpResponse = {
   pending: ITask[];
@@ -40,67 +23,41 @@ type ITaskHttp = {
 type IProps = {
   workareaId: string | string[];
   setTasks: React.Dispatch<React.SetStateAction<IPromiseHttpResponse>>;
+  users: any[];
 };
 
-export default function CreateTask({ workareaId, setTasks }: IProps) {
+export default function CreateTask({ workareaId, setTasks, users }: IProps) {
   const { handleSubmit, register, reset } = useForm<ITaskHttp>();
-  const [users, setUsers] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const loading = useLoading();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        loading.toggle();
-        const usersList = await api.get(
-          `${API_URL}/workarea/${workareaId}/member`
-        );
-        setUsers(usersList.data.users);
-      } catch (err: any) {
-        if (err.response?.data) {
-          toast.error(err.response.data.error);
-        }
-      } finally {
-        loading.toggle();
-      }
-    })();
-  }, []);
+  function handleTask(task: ITaskHttp) {
+    for (let i of Object.keys(task)) {
+      if (
+        !task[i as keyof ITaskHttp] ||
+        task[i as keyof ITaskHttp] === "" ||
+        task[i as keyof ITaskHttp] === "select"
+      )
+        delete task[i as keyof ITaskHttp];
+    }
 
-  async function handleTask(task: ITaskHttp) {
-    try {
-      loading.toggle();
-      for await (let i of Object.keys(task)) {
-        if (
-          !task[i as keyof ITaskHttp] ||
-          task[i as keyof ITaskHttp] === "" ||
-          task[i as keyof ITaskHttp] === "select"
-        )
-          delete task[i as keyof ITaskHttp];
-      }
+    const url = `${API_URL}/workarea/${workareaId}/task`;
 
-      const url = `${API_URL}/workarea/${workareaId}/task`;
-
-      const request = api.post(url, task);
-
-      const createdTask = await toast.promise(request, {
+    toast
+      .promise(api.post(url, task), {
         pending: "Creating task...",
         success: "Task was created successfully 👌",
-        error: "Error creating task 🤯",
-      });
+      })
+      .then((request) => {
+        setTasks((prevState) => ({
+          pending: [request.data, ...prevState.pending],
+          progressing: prevState.progressing,
+          done: prevState.done,
+        }));
 
-      setTasks((prevState) => ({
-        pending: [createdTask.data, ...prevState.pending],
-        progressing: prevState.progressing,
-        done: prevState.done,
-      }));
-
-      setIsModalOpen(false);
-      reset();
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Erro desconhecido");
-    } finally {
-      loading.toggle();
-    }
+        setIsModalOpen(false);
+        reset();
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   }
 
   return (

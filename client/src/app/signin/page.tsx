@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 type IUser = {
   email: string;
@@ -32,7 +33,7 @@ export default function SignIn() {
       sessionStorage.setItem("TOKEN", response.data.token);
       router.push("/workarea");
     } catch (err: any) {
-      alert(err.response.data.error);
+      toast.error(err.response.data.message);
     } finally {
       loading.toggle();
     }

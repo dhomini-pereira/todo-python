@@ -8,14 +8,7 @@ import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
 import { useForm, useFormState } from "react-hook-form";
 import { toast } from "react-toastify";
-
-type IUser = {
-  createdAt: string;
-  email: string;
-  id: number;
-  image_url: string | null;
-  username: string;
-};
+import { IUser } from "@/interfaces/user.interface";
 
 type IUserUpdate = {
   email?: string;
@@ -30,7 +23,6 @@ export default function Profile() {
   const [user, setUser] = useState<IUser>();
   const { register, handleSubmit, reset, control } = useForm<IUserUpdate>();
 
-  
   useEffect(() => {
     (async () => {
       try {
@@ -43,96 +35,80 @@ export default function Profile() {
         });
         setUser(data);
       } catch (e: any) {
-        alert(e.response.data.error);
+        toast.error(e.response.data.error);
       } finally {
         loading.toggle();
       }
     })();
   }, []);
-  
+
   const { isDirty } = useFormState({ control });
-  
+
   const changePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      loading.toggle();
-      e.preventDefault();
-      const file = e.target.files?.[0];
+    e.preventDefault();
+    const file = e.target.files?.[0];
 
-      if (!file) return;
+    if (!file) return;
 
-      const reader = new FileReader();
+    const reader = new FileReader();
 
-      const base64 = await new Promise<string | ArrayBuffer | null>(
-        (resolve, reject) => {
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }
-      );
+    const base64 = await new Promise<string | ArrayBuffer | null>(
+      (resolve, reject) => {
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      }
+    );
 
-      const url = `${API_URL}/user`;
+    const url = `${API_URL}/user`;
 
-      const request = await toast.promise(api.put(url, { image_url: base64 }), {
-        pending: "Uploading...",
-        success: "Uploaded",
-        error: "Error upload",
-      });
+    const request = await toast.promise(api.put(url, { image_url: base64 }), {
+      pending: "Uploading...",
+      success: "Uploaded",
+      error: "Error upload",
+    });
 
-      setUser((prev) => {
-        return {
-          ...prev,
-          ...request.data,
-        };
-      });
-    } catch (err: any) {
-    } finally {
-      loading.toggle();
-    }
+    setUser((prev) => {
+      return {
+        ...prev,
+        ...request.data,
+      };
+    });
   };
 
   const handle = async (data: IUserUpdate) => {
-    console.log(data);
+    const url = `${API_URL}/user`;
 
-    try {
-      loading.toggle();
-      const url = `${API_URL}/user`;
-
-      if (data.password && data.password !== data.confirm_password) {
-        throw new Error("Passwords do not match");
-      }
-
-      delete data.confirm_password;
-
-      const updateData: Partial<IUserUpdate> = {};
-      if (data.username) updateData.username = data.username;
-      if (data.email) updateData.email = data.email;
-      if (data.password) updateData.password = data.password;
-
-      if (!Object.keys(updateData).length) {
-        throw new Error("No data to update");
-      }
-
-      const request = await toast.promise(api.put(url, updateData), {
-        pending: "Updating...",
-        success: "Updated!",
-        error: "Error updating",
-      });
-
-      setUser({
-        ...user,
-        ...request.data,
-      });
-    } catch (e: any) {
-      console.log(e);
-      alert(e.response?.data?.error || "Error updating user");
-    } finally {
-      loading.toggle();
+    if (data.password && data.password !== data.confirm_password) {
+      throw new Error("Passwords do not match");
     }
+
+    delete data.confirm_password;
+
+    const updateData: Partial<IUserUpdate> = {};
+    if (data.username) updateData.username = data.username;
+    if (data.email) updateData.email = data.email;
+    if (data.password) updateData.password = data.password;
+
+    if (!Object.keys(updateData).length) {
+      return toast.error("Nothing to update");
+    }
+
+    const request = await toast.promise(api.put(url, updateData), {
+      pending: "Updating...",
+      success: "Updated!",
+      error: "Error updating",
+    });
+
+    setUser({
+      ...user,
+      ...request.data,
+    });
   };
 
   return (
     <div className="h-full">
-      <Navbar />
+      <Navbar user={user} />
       <div
         className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"

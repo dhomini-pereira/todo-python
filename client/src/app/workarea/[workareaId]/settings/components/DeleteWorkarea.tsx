@@ -1,7 +1,6 @@
 import { API_URL } from "@/app/globals";
 import Icon from "@/components/icon/Icon";
 import Modal from "@/components/modal/Modal";
-import { useLoading } from "@/context/LoadingContext";
 import api from "@/services/api.service";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -14,22 +13,17 @@ type IProps = {
 export default function DeleteWorkarea({ workareaId }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-  const loading = useLoading();
 
-  const handleDelete = async () => {
-    try {
-      loading.toggle();
-      await toast.promise(api.delete(`${API_URL}/workarea/${workareaId}`), {
+  const handleDelete = () => {
+    toast
+      .promise(api.delete(`${API_URL}/workarea/${workareaId}`), {
         pending: "Deleting workarea...",
-        success: "Workarea deleted successfully 👌",
-        error: "Error deleting workarea 🤯",
-      });
-
-      router.push("/workarea");
-    } catch (err: any) {
-    } finally {
-      loading.toggle();
-    }
+        success: "Workarea deleted successfully!",
+      })
+      .then(() => {
+        router.push("/workarea");
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
   return (

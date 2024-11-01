@@ -5,23 +5,8 @@ import { useEffect, useState } from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { toast } from "react-toastify";
 import "./EditTask.css";
-
-enum TaskStatus {
-  PENDING = "PENDING",
-  PROGRESSING = "PROGRESSING",
-  DONE = "DONE",
-}
-
-type ITask = {
-  id: number;
-  title: string;
-  createdAt: string;
-  description: string;
-  status: TaskStatus;
-  timeEstimate: string;
-  updatedAt: string;
-  userId: number;
-};
+import { ITask } from "@/interfaces/task.interface";
+import { IUser } from "@/interfaces/user.interface";
 
 type IPromiseHttpResponse = {
   pending: ITask[];
@@ -34,6 +19,7 @@ type IProps = {
   task?: ITask;
   setTasks: React.Dispatch<React.SetStateAction<IPromiseHttpResponse>>;
   workareaId: string | string[];
+  users: IUser[];
 };
 
 export default function EditTask({
@@ -41,6 +27,7 @@ export default function EditTask({
   task,
   setTasks,
   workareaId,
+  users,
 }: IProps) {
   const { handleSubmit, reset, register, control } = useForm<ITask>({
     defaultValues: {
@@ -48,58 +35,33 @@ export default function EditTask({
     },
   });
 
-  const [users, setUsers] = useState<any>();
-
   const { isDirty } = useFormState({ control });
-  const loading = useLoading();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        loading.toggle();
-        const usersList = await api.get(
-          `${API_URL}/workarea/${workareaId}/member`
-        );
-        setUsers(usersList.data.users);
-      } catch (err: any) {
-        if (err.response?.data) {
-          toast.error(err.response.data.error);
-        }
-      } finally {
-        loading.toggle();
-      }
-    })();
-  }, []);
 
   const handleEditTask = async (data: ITask) => {
-    try {
-      loading.toggle();
-      const taskInfo = await toast.promise(
+    toast
+      .promise(
         api.put(`${API_URL}/workarea/${workareaId}/task/${task?.id}`, data),
         {
-          error: "Error editing task",
           pending: "Editing task...",
           success: "Task edited successfully 👌",
         }
-      );
-
-      setTasks((prev) => {
-        for (let i of Object.keys(prev)) {
-          const index = prev[i as keyof IPromiseHttpResponse].findIndex(
-            (t: ITask) => t.id === taskInfo.data.id
-          );
-          if (index !== -1) {
-            prev[i as keyof IPromiseHttpResponse][index] = taskInfo.data;
+      )
+      .then((request) => {
+        setTasks((prev) => {
+          for (let i of Object.keys(prev)) {
+            const index = prev[i as keyof IPromiseHttpResponse].findIndex(
+              (t: ITask) => t.id === request.data.id
+            );
+            if (index !== -1) {
+              prev[i as keyof IPromiseHttpResponse][index] = request.data;
+            }
           }
-        }
-        return prev;
-      });
-    } catch (err: any) {
-    } finally {
-      loading.toggle();
-      closeModal();
-      reset();
-    }
+          return prev;
+        });
+        closeModal();
+        reset();
+      })
+      .catch((reason) => toast.error(reason.response.data.error));
   };
 
   return (

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { API_URL } from "../globals";
 import { useLoading } from "@/context/LoadingContext";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 type IUser = {
   username: string;
@@ -14,7 +15,7 @@ type IUser = {
 };
 
 export default function Page() {
-  const { handleSubmit, register } = useForm<IUser>();
+  const { handleSubmit, register, reset } = useForm<IUser>();
   const router = useRouter();
   const loading = useLoading();
 
@@ -32,8 +33,8 @@ export default function Page() {
 
       router.push("/signin");
     } catch (err: any) {
-      alert(err.response.data.error);
-      return router.refresh();
+      toast.error(err.response.data.message);
+      return reset();
     } finally {
       loading.toggle();
     }

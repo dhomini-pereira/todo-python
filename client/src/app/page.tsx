@@ -4,7 +4,7 @@ import qrcode from "../assets/todo_qrcode.png";
 
 export default function Page() {
   return (
-    <div className="box w-full h-screen bg-[#0A070E] flex justify-center items-center">
+    <div className="box w-full h-screen flex justify-center items-center">
       <div className="">
         <h1 className="text-white text text-center max-md:w-96 p-5">
           Work in a modern and innovative way

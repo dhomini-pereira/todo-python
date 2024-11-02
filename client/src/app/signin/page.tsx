@@ -31,8 +31,9 @@ export default function SignIn() {
       const response = await api.post(url, user);
 
       sessionStorage.setItem("TOKEN", response.data.token);
+      toast.success("Session started successfully!");
       router.push("/workarea");
-    } catch (err: any) {      
+    } catch (err: any) {
       toast.error(err.response.data.error);
     } finally {
       loading.toggle();
@@ -44,11 +45,8 @@ export default function SignIn() {
       <header>
         <meta name="theme-color" content="#030B19" />
       </header>
-      <div
-        className="bg-cover bg-center w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200"
-        style={{ backgroundImage: `url(${background.src})` }}
-      >
-        <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md bg-zinc-900 rounded-3xl py-9 px-12">
+      <div className="box w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200">
+        <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md border border-blue-500 bg-slate-900 rounded-3xl py-9 px-12">
           <form
             className="grid gap-5 items-center"
             onSubmit={handleSubmit(handleSignIn)}
@@ -61,7 +59,7 @@ export default function SignIn() {
             </div>
             <input
               type="email"
-              className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+              className="bg-slate-950 border-2 border-blue-500 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200"
               autoComplete="off"
               placeholder="E-mail"
               {...register("email", { required: true })}
@@ -69,12 +67,12 @@ export default function SignIn() {
             <input
               autoComplete="off"
               type="password"
-              className="bg-zinc-900 border-2 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+              className="bg-slate-950 border-2 border-blue-500 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200"
               placeholder="Password"
               {...register("password", { required: true })}
             />
             <button
-              className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200"
+              className="bg-blue-500 rounded-md h-10 hover:bg-blue-700 ease-in duration-200"
               type="submit"
             >
               Sign in

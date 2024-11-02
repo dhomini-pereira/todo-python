@@ -30,7 +30,7 @@ export default function Page() {
       loading.toggle();
       const url = `${API_URL}/signup`;
       await api.post(url, user);
-
+      toast.success("Account created successfully!");
       router.push("/signin");
     } catch (err: any) {
       toast.error(err.response.data.message);
@@ -45,11 +45,8 @@ export default function Page() {
       <header>
         <meta name="theme-color" content="#030B19" />
       </header>
-      <div
-        className="bg-cover bg-center w-full h-screen flex items-center justify-center flex-col font-body text-slate-200 overflow-y-auto"
-        style={{ backgroundImage: `url(${background.src})` }}
-      >
-        <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md bg-zinc-900 rounded-3xl py-9 px-12">
+      <div className="box w-full h-screen flex items-center justify-center flex-col font-body text-slate-200 overflow-y-auto">
+        <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md border border-blue-500 bg-slate-900 rounded-3xl py-9 px-12">
           <form
             className="grid gap-5 items-center"
             onSubmit={handleSubmit(handleSignUp)}
@@ -62,7 +59,7 @@ export default function Page() {
             </div>
             <input
               type="text"
-              className="bg-zinc-900 border-2 focus:bg-zinc-950 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3"
+              className="bg-slate-950 border-2 focus:border-blue-700 border-blue-500 rounded-md h-10 outline-none indent-3"
               placeholder="Username"
               autoComplete="off"
               {...register("username", { required: true })}
@@ -72,14 +69,14 @@ export default function Page() {
             />
             <input
               type="email"
-              className="bg-zinc-900 border-2 focus:bg-zinc-950 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+              className="bg-slate-950 border-2 focus:border-blue-700 border-blue-500 rounded-md h-10 outline-none indent-3 ease-in duration-200"
               placeholder="E-mail"
               autoComplete="off"
               {...register("email", { required: true })}
             />
             <input
               type="password"
-              className="bg-zinc-900 border-2 focus:bg-zinc-950 border-blue-800 rounded-md h-10 outline-none focus:border-blue-950 indent-3 ease-in duration-200"
+              className="bg-slate-950 border-2 focus:border-blue-700 border-blue-500 rounded-md h-10 outline-none indent-3 ease-in duration-200"
               placeholder="Password"
               autoComplete="off"
               {...register("password", { required: true })}

@@ -31,8 +31,9 @@ export default function SignIn() {
       const response = await api.post(url, user);
 
       sessionStorage.setItem("TOKEN", response.data.token);
+      toast.success("Session started successfully!");
       router.push("/workarea");
-    } catch (err: any) {      
+    } catch (err: any) {
       toast.error(err.response.data.error);
     } finally {
       loading.toggle();
@@ -44,8 +45,7 @@ export default function SignIn() {
       <header>
         <meta name="theme-color" content="#030B19" />
       </header>
-      <div
-        className="box w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200">
+      <div className="box w-full h-screen  flex items-center justify-center flex-col font-body text-slate-200">
         <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md border border-blue-500 bg-slate-900 rounded-3xl py-9 px-12">
           <form
             className="grid gap-5 items-center"

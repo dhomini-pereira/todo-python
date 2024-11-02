@@ -30,7 +30,7 @@ export default function Page() {
       loading.toggle();
       const url = `${API_URL}/signup`;
       await api.post(url, user);
-
+      toast.success("Account created successfully!");
       router.push("/signin");
     } catch (err: any) {
       toast.error(err.response.data.message);
@@ -45,9 +45,7 @@ export default function Page() {
       <header>
         <meta name="theme-color" content="#030B19" />
       </header>
-      <div
-        className="box w-full h-screen flex items-center justify-center flex-col font-body text-slate-200 overflow-y-auto"
-      >
+      <div className="box w-full h-screen flex items-center justify-center flex-col font-body text-slate-200 overflow-y-auto">
         <div className="max-sm:px-6 max-sm:max-w-xl max-sm:py-6 max-sm:w-5/6 w-3/5 h-fit max-w-md border border-blue-500 bg-slate-900 rounded-3xl py-9 px-12">
           <form
             className="grid gap-5 items-center"

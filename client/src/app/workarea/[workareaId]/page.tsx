@@ -182,7 +182,7 @@ export default function WorkAreaInfo() {
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
         }`}
       >
-        <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center  overflow-hidden">
+        <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center overflow-auto">
           <div className="h-[90%] block w-[90%]">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>

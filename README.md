@@ -16,9 +16,3 @@ O Front-End foi desenvolvido utilizando **Next.js**, proporcionando uma experiê
 - Gabriel dos Santos Reis
 - Lucas Ribeiro
 
-## QR Code
-
-Para acessar a aplicação rapidamente, você pode escanear o QR Code abaixo:
-
-![QR Code](link-para-seu-qr-code)
-

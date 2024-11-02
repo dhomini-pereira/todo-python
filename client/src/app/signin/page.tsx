@@ -32,8 +32,8 @@ export default function SignIn() {
 
       sessionStorage.setItem("TOKEN", response.data.token);
       router.push("/workarea");
-    } catch (err: any) {
-      toast.error(err.response.data.message);
+    } catch (err: any) {      
+      toast.error(err.response.data.error);
     } finally {
       loading.toggle();
     }

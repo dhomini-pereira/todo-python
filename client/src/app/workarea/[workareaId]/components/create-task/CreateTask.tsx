@@ -65,7 +65,7 @@ export default function CreateTask({ workareaId, setTasks, users }: IProps) {
       isOpen={isModalOpen}
       setIsOpen={setIsModalOpen}
       trigger={
-        <div className="text-slate-200 fixed bottom-5 right-3 z-50">
+        <div className="text-slate-200 fixed bottom-5 right-3 z-50 max-sm:bottom-24">
           <Icon
             iconName="plus"
             className="h-[64px] hover:text-slate-300 cursor-pointer text-slate-200"

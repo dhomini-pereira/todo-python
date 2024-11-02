@@ -110,7 +110,7 @@ export default function Profile() {
     <div className="h-full">
       <Navbar user={user} />
       <div
-        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
+        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden  ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
         }`}
       >
@@ -123,8 +123,8 @@ export default function Profile() {
               On here you can see and edit informations of your profile.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex justify-center p-4 h-full">
-            <div className="text-white flex flex-col max-w-[500px] w-full gap-6 justify-center overflow-hidden">
+          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:flex justify-center h-full">
+            <div className="text-white flex flex-col max-w-[500px] w-full gap-6 justify-center overflow-auto">
               <div className="bg-slate-800 p-[10px] flex justify-between items-center rounded-[10px] h-fit">
                 <div className="flex flex-row items-center">
                   {user?.image_url ? (

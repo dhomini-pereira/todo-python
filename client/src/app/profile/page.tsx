@@ -123,7 +123,7 @@ export default function Profile() {
               On here you can see and edit informations of your profile.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:flex justify-center h-full bg-red-500">
+          <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-full max-sm:flex justify-center h-full">
             <div className="text-white flex flex-col max-w-[500px] w-full gap-6 justify-center overflow-auto">
               <div className="bg-slate-800 p-[10px] flex justify-between items-center rounded-[10px] h-fit">
                 <div className="flex flex-row items-center">

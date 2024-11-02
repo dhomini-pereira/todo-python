@@ -15,4 +15,4 @@ def delete_workarea(workarea_id, userId):
     except IntegrityError:
         return jsonify({'error': 'Error deleting workarea, integrity constraint violation'}), 500
     except Exception as e:
-        return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500
+        return jsonify({'error': f'Unexpected error occurred: {str(e)}'}), 500

@@ -28,8 +28,8 @@ def login_user(data):
         }), 200
 
     except DoesNotExist:
-        return jsonify({"error": "Usuário ou senha inválidos!"}), 403
+        return jsonify({"error": "User or password incorrect!"}), 403
     except IntegrityError:
-        return jsonify({"error": "Erro de integridade no banco de dados"}), 500
+        return jsonify({"error": "Error creating user!"}), 500
     except Exception as e:
-        return jsonify({"error": f"Ocorreu um erro inesperado: {str(e)}"}), 500
+        return jsonify({"error": f"Error creating user: {str(e)}"}), 500

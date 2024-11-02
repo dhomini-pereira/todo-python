@@ -29,4 +29,4 @@ def remove_user_workarea(userId, workareaId, username):
         return jsonify({'error': 'Workarea or user not found'}), 404
     
     except Exception as e:
-        return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500
+        return jsonify({'error': f'Unexpected error occurred: {str(e)}'}), 500

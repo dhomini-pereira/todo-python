@@ -7,8 +7,8 @@ def remove_user(userId):
         user.delete_instance()
         return 200
     except DoesNotExist:
-        return {'error': 'Usuário não encontrado'}, 404
+        return {'error': 'User not found'}, 404
     except IntegrityError:
-        return {'error': 'Erro de integridade no banco de dados'}, 500
+        return {'error': 'Error deleting user'}, 500
     except Exception as e:
-        return {'error': f'Ocorreu um erro inesperado: {str(e)}'}, 500
+        return {'error': f'Error deleting user: {str(e)}'}, 500

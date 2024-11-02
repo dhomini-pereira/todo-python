@@ -21,4 +21,4 @@ def update_workarea(userId, workareaId, data):
     except WorkArea.DoesNotExist:
         return jsonify({'error': 'Workarea not found'}), 404
     except Exception as e:
-        return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500
+        return jsonify({'error': f'Unexpected error occurred: {str(e)}'}), 500

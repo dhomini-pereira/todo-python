@@ -48,4 +48,4 @@ def list_users_in_workarea(user_id, workarea_id, args):
         ]}), 200
     
     except Exception as e:
-        return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500
+        return jsonify({'error': f'Unexpected error occurred: {str(e)}'}), 500

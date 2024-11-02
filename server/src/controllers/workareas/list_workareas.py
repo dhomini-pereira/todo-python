@@ -30,6 +30,6 @@ def list_workareas(userId):
         }), 200
 
     except DoesNotExist:
-        return jsonify({'error': 'Nenhuma área de trabalho encontrada'}), 404
+        return jsonify({'error': 'No workareas found'}), 404
     except Exception as e:
-        return jsonify({'error': f'Ocorreu um erro inesperado: {str(e)}'}), 500
+        return jsonify({'error': f'Unexpected error occurred: {str(e)}'}), 500

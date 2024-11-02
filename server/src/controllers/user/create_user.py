@@ -37,6 +37,6 @@ def create_user(data):
         }), 201
 
     except IntegrityError:
-        return jsonify({"error": "Usuário já existe ou erro de integridade no banco de dados!"}), 400
+        return jsonify({"error": "User already exists!"}), 400
     except Exception as e:
-        return jsonify({"error": f"Ocorreu um erro inesperado: {str(e)}"}), 500
+        return jsonify({"error": f"Error creating user: {str(e)}"}), 500

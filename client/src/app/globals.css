@@ -11,6 +11,16 @@ body {
   font-family: "Kanit", Arial, Helvetica, sans-serif;
 }
 
+.box {
+  box-shadow: rgba(0, 140, 255, 0.25) 10px 30px 150px -12px inset,
+    rgba(0, 140, 255, 0.3) 00px 10px 56px -15px inset;
+}
+
+.text {
+  font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  line-height: clamp(3.6rem, 5vw + 1.2rem, 6rem);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

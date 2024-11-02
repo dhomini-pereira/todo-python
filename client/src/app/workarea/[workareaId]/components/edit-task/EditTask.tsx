@@ -32,6 +32,9 @@ export default function EditTask({
   const { handleSubmit, reset, register, control } = useForm<ITask>({
     defaultValues: {
       ...task,
+      timeEstimate: task?.timeEstimate
+      ? new Date(task.timeEstimate).toISOString().split("T")[0]
+      : undefined,
     },
   });
 

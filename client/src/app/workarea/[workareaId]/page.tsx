@@ -178,11 +178,11 @@ export default function WorkAreaInfo() {
         />
       )}
       <div
-        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
+        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-[100vw] max-sm:h-[calc(100vh-88px)] overflow-hidden ${
           isActive ? "w-[calc(100vw-64px)]" : "w-full"
         }`}
       >
-        <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center">
+        <div className="bg-slate-900 h-full sm:rounded-tl-[150px] flex items-end justify-center  overflow-hidden">
           <div className="h-[90%] block w-[90%]">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl text-slate-200 pb-1">{title}</h1>
@@ -193,7 +193,7 @@ export default function WorkAreaInfo() {
               />
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className="w-full h-[90%] mt-2 flex items-end gap-[2%]">
+              <div className="w-full h-[90%] max-sm:h-[60vh] mt-2 flex items-end gap-[2%] min-w-[1000px]">
                 {Object.keys(tasks).map((status) => (
                   <Droppable droppableId={status} key={status} mode="virtual">
                     {(provided) => (

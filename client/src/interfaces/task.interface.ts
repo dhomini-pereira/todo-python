@@ -10,7 +10,7 @@ export interface ITask {
   createdAt: string;
   description: string;
   status: TaskStatus;
-  timeEstimate: string;
+  timeEstimate?: string | Date;
   updatedAt: string;
   userId: number;
 }

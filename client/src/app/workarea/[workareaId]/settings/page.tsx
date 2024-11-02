@@ -114,8 +114,8 @@ export default function Settings() {
     <div className="h-full">
       <Navbar user={user} />
       <div
-        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:w-full max-sm:h-[calc(100vh-88px)] overflow-hidden ${
-          isActive ? "w-[calc(100vw-64px)]" : "w-full"
+        className={`bg-[#0A070E] ml-auto h-[calc(100vh-48px)] max-sm:ml-0 max-sm:w-fit max-sm:max-w-[100vw] max-sm:h-[calc(100vh-88px)] overflow-hidden ${
+          isActive ? "w-[calc(100vw-64px)]" : "w-[100vw]"
         }`}
       >
         <div className="bg-slate-900 h-[100%] sm:rounded-tl-[150px] flex flex-col items-center justify-start p-8">
@@ -127,7 +127,7 @@ export default function Settings() {
             </p>
           </div>
           <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] max-sm:pr-2 overflow-y-auto max-sm:flex justify-center items-center h-full">
-            <div className="flex flex-col gap-6 justify-center h-fit w-fit">
+            <div className="flex flex-col gap-6 justify-center h-fit w-[100%] max-w-[700px]">
               <form
                 className="flex flex-col"
                 onSubmit={handleSubmit(handleUpdateWorkarea)}
@@ -145,7 +145,7 @@ export default function Settings() {
                   <DeleteWorkarea workareaId={workareaId} />
                 </div>
               </form>
-              <div className="w-full overflow-x-auto">
+              <div className="w-full overflow-hidden">
                 <div>
                   <Modal
                     isOpen={isModalOpen}
@@ -199,20 +199,37 @@ export default function Settings() {
                 <table className="min-w-full bg-slate-800 text-slate-200">
                   <thead>
                     <tr>
-                      <th className="py-3 px-6 text-left">ID</th>
-                      <th className="py-3 px-6 text-left">Email</th>
+                      <th className="py-3 px-6 text-left max-md:hidden">ID</th>
+                      <th className="py-3 px-6 text-left  max-md:hidden">
+                        Email
+                      </th>
                       <th className="py-3 px-6 text-left">Username</th>
-                      <th className="py-3 px-6 text-left">Image</th>
+                      <th className="py-3 px-6 text-left max-md:hidden">
+                        Image
+                      </th>
                       <th className="py-3 px-6 text-left">Ações</th>
                     </tr>
                   </thead>
                   <tbody>
                     {users?.map((user) => (
                       <tr key={user.id} className="border-b border-slate-700">
-                        <td className="py-3 px-6">{user.id}</td>
-                        <td className="py-3 px-6">{user.email}</td>
-                        <td className="py-3 px-6">{user.username}</td>
-                        <td className="py-3 px-6">
+                        <td className="py-3 px-6 max-md:hidden">{user.id}</td>
+                        <td className="py-3 px-6 max-md:hidden">
+                          {user.email}
+                        </td>
+                        <td className="py-3 px-6 max-md:flex max-md:items-center max-md:gap-5">
+                          {user.image_url ? (
+                            <img
+                              src={user.image_url}
+                              alt={user.username}
+                              className="w-10 h-10 rounded-full hidden max-md:block"
+                            />
+                          ) : (
+                            <Icon iconName="profile" className="h-9" />
+                          )}
+                          {user.username}
+                        </td>
+                        <td className="py-3 px-6 max-md:hidden">
                           {user.image_url ? (
                             <img
                               src={user.image_url}

@@ -245,10 +245,31 @@ export default function WorkAreaInfo() {
                                     >
                                       {task.title}
                                     </h1>
+                                    {task?.timeEstimate ? (
+                                      new Date(task.timeEstimate).getTime() <
+                                        new Date().getTime() &&
+                                      task.status !== "DONE" ? (
+                                        <>
+                                          <Icon
+                                            iconName="warning"
+                                            className={`warning size-6 absolute left-2 ${
+                                              status === "pending"
+                                                ? "text-yellow-500"
+                                                : status === "progressing"
+                                                ? "text-orange-500"
+                                                : "text-green-500"
+                                            }`}
+                                          />
+                                          <span className="timeLimit absolute left-10 text-sm hidden p-1 rounded-lg bg-red-600 text-white">
+                                            Task expired
+                                          </span>
+                                        </>
+                                      ) : null
+                                    ) : null}
                                     <Icon
                                       iconName="trash"
                                       onClick={() => openDeleteModal(task)}
-                                      className="size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all"
+                                      className="trash size-5 absolute right-2 top-2 text-red-500 opacity-0 transition-all"
                                     />
                                   </div>
                                 )}

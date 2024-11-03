@@ -33,7 +33,7 @@ export default function Page() {
       toast.success("Account created successfully!");
       router.push("/signin");
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      toast.error(err.response.data.error);
       return reset();
     } finally {
       loading.toggle();

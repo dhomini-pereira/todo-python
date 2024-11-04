@@ -20,9 +20,7 @@ def list_tasks(filters, userId, id):
         if not work_area_query.exists():
             return jsonify({'error': 'Forbidden: User does not have access to this work area'}), 403
 
-        page = int(filters.get('page', 1))
         status = filters.get('status')
-        text = filters.get('text')
 
         query = (
             Task
@@ -39,10 +37,7 @@ def list_tasks(filters, userId, id):
         if status:
             query = query.where(Task.status == status)
 
-        if text:
-            query = query.where(Task.title.contains(text))
-
-        tasks = query.order_by(Task.created_at.desc()).limit(10).offset((page - 1) * 10)
+        tasks = query.order_by(Task.created_at.desc())
         task_total = query.count()
 
         if not tasks:
@@ -72,7 +67,7 @@ def list_tasks(filters, userId, id):
         return jsonify(tasks_obj), 200
 
     except DoesNotExist:
-        return jsonify({ 'tasks': [], 'total': 0 }), 404
+        return jsonify({ 'tasks': [], 'total': 0 }), 200
     except IntegrityError:
         return jsonify({'error': 'Failed to retrieve tasks due to database error'}), 500
     except Exception as e:

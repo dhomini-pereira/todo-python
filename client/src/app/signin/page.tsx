@@ -31,7 +31,6 @@ export default function SignIn() {
       const response = await api.post(url, user);
 
       sessionStorage.setItem("TOKEN", response.data.token);
-      toast.success("Session started successfully!");
       router.push("/workarea");
     } catch (err: any) {
       toast.error(err.response.data.error);

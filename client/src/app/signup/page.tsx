@@ -33,7 +33,7 @@ export default function Page() {
       toast.success("Account created successfully!");
       router.push("/signin");
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      toast.error(err.response.data.error);
       return reset();
     } finally {
       loading.toggle();
@@ -62,9 +62,11 @@ export default function Page() {
               className="bg-slate-950 border-2 focus:border-blue-700 border-blue-500 rounded-md h-10 outline-none indent-3"
               placeholder="Username"
               autoComplete="off"
-              {...register("username", { required: true })}
+              {...register("username", { required: true, minLength: 3 })}
               onChange={(e) => {
-                e.target.value = e.target.value.toLowerCase();
+                e.target.value = e.target.value
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]/g, "");
               }}
             />
             <input
@@ -79,7 +81,7 @@ export default function Page() {
               className="bg-slate-950 border-2 focus:border-blue-700 border-blue-500 rounded-md h-10 outline-none indent-3 ease-in duration-200"
               placeholder="Password"
               autoComplete="off"
-              {...register("password", { required: true })}
+              {...register("password", { required: true, minLength: 6 })}
             />
             <button
               className="bg-blue-800 rounded-md h-10 hover:bg-blue-900 ease-in duration-200"

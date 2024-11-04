@@ -16,3 +16,6 @@ O Front-End foi desenvolvido utilizando **Next.js**, proporcionando uma experiê
 - Gabriel dos Santos Reis
 - Lucas Ribeiro
 
+### Acesse o site pelo QR Code:
+
+![QR Code para acesso ao site](https://pub-1e774adbecc2425fb049dc46d39cc1bb.r2.dev/downloads/qr_code.png)

@@ -18,6 +18,8 @@ from src.controllers.workareas.create_workarea import create_workarea
 from src.controllers.workareas.find_workarea import find_workarea
 from src.controllers.workareas.list_users_in_workarea import list_users_in_workarea
 from src.controllers.workareas.update_workarea import update_workarea
+from src.controllers.auth.forgot_password import forgot_password
+from src.controllers.auth.reset_password import reset_password
 from src.utils.decode_token import decode_token
 from flask_cors import CORS
 
@@ -35,7 +37,7 @@ def validar_token():
     if request.method == 'OPTIONS':
         return jsonify({"message": "CORS preflight request allowed."}), 200
     
-    if request.path in ['/signup', '/signin']:
+    if request.path in ['/signup', '/signin', '/forgot-password', '/reset-password']:
         return None
     
     auth_header = request.headers.get('Authorization')
@@ -146,6 +148,16 @@ def edit_workarea(workarea_id):
     userId = decode_token(request.headers.get('Authorization')).get('data').get('id')
     data = request.json
     return update_workarea(userId, workarea_id, data)
+
+@app.post("/forgot-password")
+def forgot():
+    data = request.json
+    return forgot_password(data)
+
+@app.post("/reset-password")
+def reset():
+    data = request.json
+    return reset_password(data)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

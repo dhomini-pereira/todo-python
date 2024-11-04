@@ -27,10 +27,6 @@ export default function Sidebar({
 
   const menuItems: IMenuItem[] = [
     {
-      href: "/",
-      icon: <Icon className="w-10 h-10 p-2" iconName="home" />,
-    },
-    {
       href: "/workarea",
       icon: <Icon className="w-10 h-10 p-2" iconName="groups" />,
     },

@@ -54,7 +54,7 @@ export default function Sidebar({
             style={{ backgroundColor: "#0A070E" }}
           >
             {menuItems.map((item, index) => (
-              <a key={index} href={item.href} className="rounded-full">
+              <a key={index} href={item.href} className="rounded-full" id={item.href.replace("/", "")}>
                 {item.icon}
               </a>
             ))}
@@ -62,7 +62,7 @@ export default function Sidebar({
             <Icon
               iconName="exit"
               onClick={() => signOut()}
-              className="w-10 h-10 p-2 hover:bg-red-600 duration-500 rounded-full cursor-pointer"
+              className="exitIcon w-10 h-10 p-2 hover:bg-red-600 duration-500 rounded-full cursor-pointer"
             />
           </div>
         </div>

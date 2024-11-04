@@ -27,6 +27,7 @@ export default function Navbar({ user }: IProps) {
       </div>
 
       <div className="w-fit flex items-center gap-3 text-base">
+        <h2>{user?.username || "Unknown"}</h2>
         {user?.image_url ? (
           <img
             src={user?.image_url}
@@ -36,7 +37,6 @@ export default function Navbar({ user }: IProps) {
         ) : (
           <Icon iconName="profile" className="h-9" />
         )}
-        <h2>{user?.username || "Unknown"}</h2>
       </div>
     </div>
   );

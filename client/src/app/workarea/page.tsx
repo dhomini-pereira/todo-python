@@ -9,6 +9,8 @@ import CreateWorkarea from "./components/CreateWorkarea";
 import { toast } from "react-toastify";
 import { IUser } from "@/interfaces/user.interface";
 import { IWorkarea } from "@/interfaces/workarea.interface";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 type IResponseWorkarea = {
   workareas: IWorkarea[];
@@ -44,6 +46,70 @@ export default function WorkArea() {
     })();
   }, []);
 
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
+
+    if (!hasSeenTutorial) {
+      const driverObj = driver({
+        showProgress: true,
+        steps: [
+          {
+            element: "#workAreasLocation",
+            popover: {
+              title: "Your Work Areas",
+              description:
+                "Here, you can manage or create all your PERSONAL and PROFESSIONAL work areas.",
+              side: "left",
+              align: "start",
+            },
+          },
+          {
+            element: "#workAreasLocation a:nth-child(1)",
+            popover: {
+              title: "Create a New Work Area",
+              description:
+                "Choose between a PROFESSIONAL or PERSONAL work area.",
+              side: "left",
+              align: "start",
+            },
+          },
+          {
+            element: "#profile",
+            popover: {
+              title: "Edit Your Profile",
+              description:
+                "You can update your photo, email, and password here!",
+              side: "left",
+              align: "start",
+            },
+          },
+          {
+            element: "#workarea",
+            popover: {
+              title: "Manage Your Work Areas",
+              description:
+                "In this section, you can manage or create all your PERSONAL and PROFESSIONAL work areas.",
+              side: "left",
+              align: "start",
+            },
+          },
+          {
+            element: ".exitIcon",
+            popover: {
+              title: "Log Out",
+              description: "Click here to end your session.",
+              side: "left",
+              align: "start",
+            },
+          },
+        ],
+      });
+      driverObj.drive();
+
+      localStorage.setItem("hasSeenTutorial", "true");
+    }
+  }, []);
+
   return (
     <div className="h-full">
       <Navbar user={user} />
@@ -58,7 +124,10 @@ export default function WorkArea() {
             <p className="text-slate-500">
               Manage all your activities in a single screen.
             </p>
-            <div className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] overflow-y-auto max-sm:flex max-sm:flex-nowrap p-3">
+            <div
+              className="mt-8 flex flex-wrap gap-2 max-sm:flex-col w-[100%] max-sm:h-[54vh] overflow-y-auto max-sm:flex max-sm:flex-nowrap p-3"
+              id="workAreasLocation"
+            >
               <CreateWorkarea />
               {workareas?.map((workarea, index) => (
                 <a

@@ -175,7 +175,12 @@ export default function Profile() {
                     type="text"
                     placeholder="Usuário"
                     className="p-2 rounded-md bg-slate-700 text-slate-200"
-                    {...register("username")}
+                    {...register("username", { minLength: 3 })}
+                    onChange={(e) => {
+                      e.target.value = e.target.value
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]/g, "");
+                    }}
                   />
                   <input
                     type="email"
@@ -187,13 +192,13 @@ export default function Profile() {
                     type="password"
                     placeholder="Password"
                     className="p-2 rounded-md bg-slate-700 text-slate-200"
-                    {...register("password")}
+                    {...register("password", { minLength: 6 })}
                   />
                   <input
                     type="password"
                     placeholder="Confirm password"
                     className="p-2 rounded-md bg-slate-700 text-slate-200"
-                    {...register("confirm_password")}
+                    {...register("confirm_password", { minLength: 6 })}
                   />
                   <button
                     type="submit"

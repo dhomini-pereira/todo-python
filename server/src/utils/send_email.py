@@ -10,9 +10,8 @@ def send_email(email, token):
     senha = os.getenv("PASS_EMAIL")
     email_destino = email
     assunto = "Forgot Password"
-    mensagem = "Reset Password in URL: {}".format(
-        f"http://{host}/reset-password?token={token}"
-    )
+    mensagem = f"Reset Password in URL: http://{host}/reset-password?token={token}"
+    
     msg = MIMEMultipart()
     msg["From"] = email_origem
     msg["To"] = email_destino

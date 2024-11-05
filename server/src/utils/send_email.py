@@ -3,13 +3,15 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 
+host = os.getenv("DB_HOST")
+
 def send_email(email, token):
     email_origem = os.getenv("EMAIL")
     senha = os.getenv("PASS_EMAIL")
     email_destino = email
     assunto = "Forgot Password"
-    mensagem = "URL para trocar a senha: {}".format(
-        f"http://{os.getenv("DB_HOST")}/reset-password?token={token}"
+    mensagem = "Reset Password in URL: {}".format(
+        f"http://{host}/reset-password?token={token}"
     )
     msg = MIMEMultipart()
     msg["From"] = email_origem

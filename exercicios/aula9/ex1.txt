@@ -1,0 +1,11 @@
+Questão 1) A linguagem Python é uma escolha bastante interessante para desenvolver diversas aplicações, 
+com, por exemplo, o desenvolvimento de aplicações com interface gráfica (GUI). Um desses frameworks é 
+o Tkinter. A respeito do Tkinter, selecione a opção correta. 
+
+R: d) É o framework padrão do Python para desenvolvimento de aplicações GUI.
+
+Questão 2) Um dos frameworks do Python mais conhecidos para desenvolvimento GUI é o Flexx. Em 
+relação framework Flexx, selecione a opção correta. 
+
+R: c) Uma das formas de instalá-lo é através do pip, ou seja, pip install flexx. 
+

@@ -1,0 +1,15 @@
+Questão 1) O Tkinter é a biblioteca padrão do Python para desenvolver aplicações gráficas. Ela possui 
+diversos componentes (widgets). A respeito dos widgets do Tkinter, selecione a opção correta. 
+
+R: a) Botão: uma possibilidade de uso é para confirmar uma ação de salvar os dados.
+
+Questão 2) Observe a figura com uma aplicação desenvolvida com o Tkinter: 
+
+Agora,  vamos olhar o código que gerou a aplicação faltando alguns trechos: 
+1. import lacuna1 as tk 
+2. janela = tk.Tk() 
+3. janela.title("Aplicação GUI") 
+4. janela.lacuna2() 
+Selecione a opção que completa corretamente o código para obter a aplicação que foi apresentada na figura. 
+
+R: b) Substituir lacuna1 por tkinter e lacuna2 por mainloop.

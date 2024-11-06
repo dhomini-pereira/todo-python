@@ -40,3 +40,35 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #0369a1;
 }
+
+.driver-popover {
+  background-color: #023e5f !important;
+  color: #fff !important;
+}
+
+.driver-popover-progress-text {
+  color: #fff !important;
+}
+
+.driver-popover-next-btn {
+  background-color: #0369a1 !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+.driver-popover-prev-btn {
+  background-color: #0369a1 !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+.driver-popover-arrow {
+  border-color: #023e5f !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+}
+
+.driver-popover-close-btn {
+  color: #fff !important;
+}

@@ -77,6 +77,7 @@ export default function SignIn() {
                   e.preventDefault();
                   setShowPassword((prevState) => !prevState);
                 }}
+                type="button"
                 className="bg-sky-700 p-1 rounded-md absolute right-2 top-[6px]"
               >
                 {showPassword ? (

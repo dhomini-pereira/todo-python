@@ -1,0 +1,21 @@
+Questão 1) PostgreSQL é um dos bancos de dados mais utilizados no mundo, por ser open-source torna-se 
+uma ótima opção aos bancos de dados pagos como Oracle e SqlServer. O PSYCOPG é considerado o 
+adaptador mais utilizado para conexões com o PostgreSQL. A forma correta de abrir conexão com o 
+PSYCOPG é:  
+
+R: e) import psycopg2 con = psycopg2.connect(host='localhost', database='exemplo', user='postgres', password='postgres123'). 
+
+Questão 2) O Python possui diversos frameworks para trabalhar com banco de dados. Um desses 
+frameworks é o psycopg2 que faz interface com o Postgres. Observe o programa abaixo.  
+1. import psycopg2 
+2. conn = psycopg2.connect(database = "postgres", user = "postgres", password = " senha123", host = "127.0.0.1", port = "5432") 
+3. print ("Conexão com o Banco de Dados aberta com sucesso!") 
+4. cur = conn.cursor() 
+5. cur.execute("""select * from public."AGENDA" where "id" = 1""") 
+6. registro = cur.fetchone() 
+7. print(registro) 
+8. conn.commit() 
+9. print("Seleção realizada com sucesso!"); 
+10. conn.close() 
+
+R: b) O programa realiza uma consulta na tabela AGENDA onde o atributo id da tabela seja igual a 1. 

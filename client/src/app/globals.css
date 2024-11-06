@@ -44,22 +44,26 @@ body {
 .driver-popover {
   background-color: #023e5f !important;
   color: #fff !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
 }
 
 .driver-popover-progress-text {
   color: #fff !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
 }
 
 .driver-popover-next-btn {
   background-color: #0369a1 !important;
   color: #fff !important;
   text-shadow: none !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
 }
 
 .driver-popover-prev-btn {
   background-color: #0369a1 !important;
   color: #fff !important;
   text-shadow: none !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
 }
 
 .driver-popover-arrow {
@@ -67,8 +71,19 @@ body {
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
   border-left-color: transparent !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
 }
 
 .driver-popover-close-btn {
   color: #fff !important;
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
+}
+
+.driver-popover-title {
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
+}
+
+.driver-popover-description {
+  font-family: "Kanit", Arial, Helvetica, sans-serif !important;
+  font-weight: 300 !important;
 }

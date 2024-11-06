@@ -62,7 +62,7 @@ export default function ResetPassword({ searchParams }: IProps) {
             <input
               type={`${showPassword ? "text" : "password"}`}
               placeholder="New password"
-              {...register("password", { required: true, maxLength: 6 })}
+              {...register("password", { required: true, minLength: 6 })}
               className="w-full bg-slate-950 border-2 border-blue-500 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200"
             />
             <button
@@ -109,7 +109,7 @@ export default function ResetPassword({ searchParams }: IProps) {
               type={`${showConfirmPassword ? "text" : "password"}`}
               {...register("confirm_password", {
                 required: true,
-                maxLength: 6,
+                minLength: 6,
               })}
               placeholder="Confirm password"
               className="w-full bg-slate-950 border-2 border-blue-500 rounded-md h-10 outline-none focus:border-blue-700 indent-3 ease-in duration-200"
